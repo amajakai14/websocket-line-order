@@ -1,0 +1,15 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "lineserverdb",
+  "password": "lineserverpw",
+  "database": "linemenudb",
+  "entities": ["src/entities/*.entity.ts"],
+  "migrations": ["src/migrations/**/*.ts"],
+  "cli": {
+    "migrationsDir": "src/migrations"
+  },
+  "synchronize": true,
+  "logging": true
+}
