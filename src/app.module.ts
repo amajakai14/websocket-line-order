@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { EventsGateway } from './socket/socket.gateway';
 import { CustomerModule } from './customer/customer.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { typeOrmAsyncConfig } from './config/typeorm.config';
+
 @Module({
-  imports: [CustomerModule, TypeOrmModule.forRoot()],
+  imports: [CustomerModule, TypeOrmModule.forRootAsync(typeOrmAsyncConfig)],
   controllers: [AppController],
   providers: [AppService, EventsGateway],
 })
