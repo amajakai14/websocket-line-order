@@ -23,19 +23,23 @@ export class EventsGateway {
 
   @SubscribeMessage('message')
   handleEvent(client: Socket, socketRequest: SocketRequest): void {
-    console.log('client', client);
-    console.log(
-      `Object Received with room ${socketRequest.room} and messsage: ${socketRequest.message}`,
-    );
     this.joinRoom(client, socketRequest.room);
     this.server.to(socketRequest.room).emit('message', socketRequest.message);
-    console.log(`message from server ${socketRequest.message}`);
   }
 
   @SubscribeMessage('addCart')
   handleCart(@MessageBody() item: string): void {
     this.server.emit('addCart', item);
-    console.log(`message from server ${item}`);
+  }
+
+  @SubscribeMessage('joinAdmin')
+  handleAdminJoin(client: Socket, admin: string): void {
+    console.log('admin: ', admin);
+    client.join(['channel1', 'channel2']);
+  }
+
+  handleAnnounce(rooms: string[]): void {
+    this.server.to(rooms).emit('message', 'some menu has been sold out');
   }
 
   joinRoom(client: Socket, room: string): void {
