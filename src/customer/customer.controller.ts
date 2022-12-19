@@ -1,5 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { CreateCustomerRequest } from './customer.create.dto';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { CreateCustomerRequest } from './customer.create.request';
 import { CustomerService } from './customer.service';
 
 @Controller('customer')
@@ -7,9 +7,8 @@ export class CustomerController {
   constructor(readonly customerService: CustomerService) {}
 
   @Post()
-  async createCustomer(
-    @Body() createCustomerRequest: CreateCustomerRequest,
-  ): Promise<void> {
-    console.log(createCustomerRequest);
+  @HttpCode(201)
+  async createCustomer(@Body() request: CreateCustomerRequest): Promise<void> {
+    this.customerService.create(request);
   }
 }

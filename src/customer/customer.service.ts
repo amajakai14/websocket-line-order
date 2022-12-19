@@ -1,25 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CustomerEntity } from '../entities/customer.entity';
+import { CreateCustomerRequest } from './customer.create.request';
+import * as bcrypt from 'bcrypt';
+import { CustomerRepository } from '../repositories/customer.repository';
 
 @Injectable()
 export class CustomerService {
-  constructor(
-    @InjectRepository(CustomerEntity)
-    private customersRepository: Repository<CustomerEntity>,
-  ) {}
+  constructor(private customersRepository: CustomerRepository) {}
 
-  findOne(login_id: string, password: string): boolean {
-    const user = this.customersRepository.findOneBy({ login_id, password });
-    return user !== null;
+  async create(request: CreateCustomerRequest): Promise<void> {
+    const hashedPassword = await this.hash(request.password);
+    request.password = hashedPassword;
+    this.customersRepository.register(request);
   }
 
-  addOne(customer: CustomerEntity) {
-    this.customersRepository.save(customer);
-  }
-
-  private isDuplicate(): boolean {
-    return true;
+  private async hash(password: string): Promise<string> {
+    const saltRounds = 10;
+    return await bcrypt.hash(password, saltRounds);
   }
 }

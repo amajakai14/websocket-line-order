@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 
 @Entity('mock_table')
-export class SessionEntity extends BaseEntity {
+export class TableEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   table_id: number;
 

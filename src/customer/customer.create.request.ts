@@ -7,7 +7,7 @@ export class CreateCustomerRequest {
 
   @IsNotEmpty()
   @MinLength(8)
-  private readonly _password: string;
+  private _password: string;
 
   @IsNotEmpty()
   @IsEmail()
@@ -19,6 +19,10 @@ export class CreateCustomerRequest {
 
   public get password(): string {
     return this._password;
+  }
+
+  public set password(password: string) {
+    this._password = password;
   }
 
   public get email(): string {

@@ -4,11 +4,16 @@ import { AppService } from './app.service';
 import { EventsGateway } from './socket/socket.gateway';
 import { CustomerModule } from './customer/customer.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmAsyncConfig } from './config/typeorm.config';
+import { typeOrmConfig } from './config/typeorm.config';
+import { LoginModule } from './login/login.module';
+import { DataSource } from 'typeorm';
 
 @Module({
-  imports: [CustomerModule, TypeOrmModule.forRootAsync(typeOrmAsyncConfig)],
+  imports: [TypeOrmModule.forRoot(typeOrmConfig), CustomerModule, LoginModule],
   controllers: [AppController],
   providers: [AppService, EventsGateway],
+  exports: [TypeOrmModule],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}

@@ -12,7 +12,7 @@ export class SessionEntity extends BaseEntity {
   session_id: string;
 
   @Column({ type: 'int' })
-  customer_id: string;
+  customer_id: number;
 
   @Column({ type: 'timestamp', default: () => "NOW() + INTERVAL '24 hours'" })
   expire_datetime: Date;
