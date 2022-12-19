@@ -14,7 +14,7 @@ export class SessionEntity extends BaseEntity {
   @Column({ type: 'int' })
   customer_id: string;
 
-  @Column({ type: 'datetime', default: () => "NOW() + INTERVAL '24 hours'" })
+  @Column({ type: 'timestamp', default: () => "NOW() + INTERVAL '24 hours'" })
   expire_datetime: Date;
 
   @BeforeInsert()
