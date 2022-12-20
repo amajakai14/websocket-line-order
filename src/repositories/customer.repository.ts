@@ -19,20 +19,7 @@ export class CustomerRepository {
     return this.customerRepository.findOneBy({ email });
   }
 
-  async register(customer: CreateCustomerRequest): Promise<void> {
-    const customerEntity = new CustomerEntity();
-    customerEntity.login_id = customer.loginId;
-    customerEntity.email = customer.email;
-    customerEntity.password = customer.password;
-    console.log(customerEntity.password);
-    try {
-      this.customerRepository.insert(customerEntity);
-    } catch (err) {
-      console.log(err);
-      throw new HttpException(
-        `error on inserting data ${err}`,
-        HttpStatus.CONFLICT,
-      );
-    }
+  async register(customerEntity: CustomerEntity): Promise<void> {
+    this.customerRepository.insert(customerEntity);
   }
 }
