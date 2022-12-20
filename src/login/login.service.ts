@@ -1,7 +1,11 @@
-import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { sign } from 'jsonwebtoken';
+import { EnvironmentConfig } from '../config/env.config';
+import { CustomerEntity } from '../entities/customer.entity';
+import { Password } from '../model/password';
 import { Result } from '../model/result';
+import { Token } from '../model/token';
 import { CustomerRepository } from '../repositories/customer.repository';
-import { SessionRepository } from '../repositories/session.repository';
 import { LoginRequest } from './login.request';
 import { LoginResponse } from './login.response';
 
@@ -9,26 +13,42 @@ import { LoginResponse } from './login.response';
 export class LoginService {
   constructor(
     private customersRepository: CustomerRepository,
-    private sessionRepository: SessionRepository,
+    private environmentConfig: EnvironmentConfig,
   ) {}
 
   async login(request: LoginRequest): Promise<LoginResponse> {
-    const customer = await this.customersRepository.getById(request.loginId);
-    if (customer == null) throw new UnauthorizedException();
-
-    const token = await this.sessionRepository.createSessionOf(
-      customer.customer_id,
+    const customerEntity = await this.customersRepository.getById(
+      request.loginId,
     );
-
-    if (token == null) {
-      return new LoginResponse(
-        token,
-        Result.BAD(
-          HttpStatus.INTERNAL_SERVER_ERROR,
-          'unable to generate token',
-        ),
+    if (customerEntity == null) {
+      const result = Result.BAD(
+        HttpStatus.BAD_REQUEST,
+        'ID or Password are incorrect',
       );
+      return new LoginResponse(new Token(null), result);
     }
+    const validate = await this.validatePasswordOf(request, customerEntity);
+    if (!validate) {
+      const result = Result.BAD(
+        HttpStatus.BAD_REQUEST,
+        'ID or Password are incorrect',
+      );
+      return new LoginResponse(new Token(null), result);
+    }
+
+    const secret = this.environmentConfig.get('JWT_SECRET');
+    console.log('secret', secret);
+    const token = new Token(sign(request, secret, { expiresIn: 30 }));
+    console.log('token', token);
     return new LoginResponse(token, Result.OK());
+  }
+
+  async validatePasswordOf(
+    request: LoginRequest,
+    customerEntity: CustomerEntity,
+  ): Promise<boolean> {
+    return await new Password(request.password).compareHashed(
+      customerEntity.password,
+    );
   }
 }
