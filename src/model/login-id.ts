@@ -1,15 +1,15 @@
 export class LoginId {
-  private readonly _loginId: string;
+  readonly loginId: string;
 
   isEqual(that: string): boolean {
-    return this._loginId === that;
+    return this.loginId === that;
   }
 
   toString(): string {
-    return this._loginId;
+    return this.loginId;
   }
 
   constructor(loginId: string) {
-    this._loginId = loginId;
+    this.loginId = loginId;
   }
 }

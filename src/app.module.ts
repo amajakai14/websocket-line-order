@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { EventsGateway } from './socket/socket.gateway';
-import { CustomerModule } from './customer/customer.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
+import { CustomerModule } from './customer/customer.module';
 import { LoginModule } from './login/login.module';
-import { DataSource } from 'typeorm';
+import { EventsGateway } from './socket/socket.gateway';
 
 @Module({
   imports: [TypeOrmModule.forRoot(typeOrmConfig), CustomerModule, LoginModule],
@@ -14,6 +13,4 @@ import { DataSource } from 'typeorm';
   providers: [AppService, EventsGateway],
   exports: [TypeOrmModule],
 })
-export class AppModule {
-  constructor(private dataSource: DataSource) {}
-}
+export class AppModule {}

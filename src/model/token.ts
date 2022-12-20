@@ -1,11 +1,11 @@
 export class Token {
-  private readonly _token: string;
+  readonly token: string;
 
   toString(): string {
-    return this._token;
+    return this.token;
   }
 
   constructor(token: string) {
-    this._token = token;
+    this.token = token;
   }
 }

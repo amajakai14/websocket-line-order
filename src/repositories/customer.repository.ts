@@ -1,8 +1,8 @@
-import { Repository } from 'typeorm';
-import { CreateCustomerRequest } from '../customer/customer.create.request';
-import { CustomerEntity } from '../entities/customer.entity';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CustomerEntity } from '../entities/customer.entity';
+import { Result } from '../model/result';
 
 @Injectable()
 export class CustomerRepository {
@@ -19,7 +19,10 @@ export class CustomerRepository {
     return this.customerRepository.findOneBy({ email });
   }
 
-  async register(customerEntity: CustomerEntity): Promise<void> {
-    this.customerRepository.insert(customerEntity);
+  async register(customerEntity: CustomerEntity): Promise<Result> {
+    return this.customerRepository
+      .insert(customerEntity)
+      .then(Result.OK)
+      .catch((err) => new Result(false, HttpStatus.SERVICE_UNAVAILABLE, err));
   }
 }

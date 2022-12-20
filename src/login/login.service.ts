@@ -1,9 +1,5 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Result } from '../model/result';
 import { CustomerRepository } from '../repositories/customer.repository';
 import { SessionRepository } from '../repositories/session.repository';
 import { LoginRequest } from './login.request';
@@ -24,11 +20,15 @@ export class LoginService {
       customer.customer_id,
     );
 
-    if (token == null)
-      throw new HttpException(
-        'unable to generate token',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+    if (token == null) {
+      return new LoginResponse(
+        token,
+        Result.BAD(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          'unable to generate token',
+        ),
       );
-    return new LoginResponse(token);
+    }
+    return new LoginResponse(token, Result.OK());
   }
 }
