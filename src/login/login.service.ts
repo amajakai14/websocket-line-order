@@ -1,10 +1,13 @@
-import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
-import { LoginResponse } from './login.response';
-import { LoginRequest } from './login.request';
-import { InjectRepository } from '@nestjs/typeorm';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CustomerRepository } from '../repositories/customer.repository';
-import { UnauthorizedException } from '@nestjs/common';
 import { SessionRepository } from '../repositories/session.repository';
+import { LoginRequest } from './login.request';
+import { LoginResponse } from './login.response';
 
 @Injectable()
 export class LoginService {
