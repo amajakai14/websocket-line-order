@@ -7,7 +7,14 @@ import { EnvironmentConfig } from '../config/env.config';
 export class AuthenticationMiddleware implements NestMiddleware {
   constructor(private environmentConfig: EnvironmentConfig) {}
   async use(req: Request, res: Response, next: () => void) {
-    const [type, token] = req.headers.authorization.split(' ');
+    const authen = req.headers.authorization;
+    if (authen == null) {
+      res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .send('Cant read authentication');
+      return;
+    }
+    const [type, token] = authen.split(' ');
     const secret = this.environmentConfig.get('JWT_SECRET');
 
     if (!token) {
@@ -17,7 +24,9 @@ export class AuthenticationMiddleware implements NestMiddleware {
 
     try {
       const decoded = await verify(token, secret);
-      console.log('decoded:', decoded);
+      req.app.locals = {
+        decoded,
+      };
       next();
     } catch (err) {
       res.status(HttpStatus.UNAUTHORIZED).send('Invalid token');

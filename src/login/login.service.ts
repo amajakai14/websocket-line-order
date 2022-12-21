@@ -38,7 +38,7 @@ export class LoginService {
 
     const secret = this.environmentConfig.get('JWT_SECRET');
     console.log('secret', secret);
-    const token = new Token(sign(request, secret, { expiresIn: 30 }));
+    const token = new Token(sign(request, secret, { expiresIn: 600 }));
     console.log('token', token);
     return new LoginResponse(token, Result.OK());
   }
