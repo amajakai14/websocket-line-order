@@ -10,6 +10,6 @@ export class MailAddress {
   }
 
   constructor(mailAddress: string) {
-    this._mailAddress = mailAddress;
+    this._mailAddress = mailAddress.toLowerCase();
   }
 }

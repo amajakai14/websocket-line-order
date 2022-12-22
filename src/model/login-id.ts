@@ -10,6 +10,6 @@ export class LoginId {
   }
 
   constructor(loginId: string) {
-    this.loginId = loginId;
+    this.loginId = loginId.toLowerCase();
   }
 }
