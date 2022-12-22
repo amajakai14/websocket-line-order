@@ -17,7 +17,7 @@ export class LoginService {
   ) {}
 
   async login(request: LoginRequest): Promise<LoginResponse> {
-    const customerEntity = await this.customersRepository.getById(
+    const customerEntity = await this.customersRepository.getByLoginId(
       request.loginId,
     );
     if (customerEntity == null) {

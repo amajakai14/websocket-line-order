@@ -7,6 +7,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { Customer } from '../model/customer';
+import { CustomerId } from '../model/customer-id';
 import { LoginId } from '../model/login-id';
 import { MailAddress } from '../model/mailaddress';
 import { Password } from '../model/password';
@@ -24,6 +25,7 @@ export class CustomerController {
   @HttpCode(201)
   async createCustomer(@Body() request: CreateCustomerRequest) {
     const customer = new Customer(
+      CustomerId.empty(),
       new LoginId(request.loginId),
       new MailAddress(request.mailAddress),
       new Password(request.password),

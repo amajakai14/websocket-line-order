@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
-export enum MENU_TYPE {
-  APPETIZER,
-  MAIN,
-  DESSERT,
-  DRINK,
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+export enum MenuType {
+  APPETIZER = 'APPETIZER',
+  MAIN = 'MAIN',
+  DESSERT = 'DESSERT',
+  DRINK = 'DRINK',
 }
 
 @Entity('mock_menu')
@@ -14,8 +14,8 @@ export class MenuEntity extends BaseEntity {
   @Column()
   menu_name: string;
 
-  @Column({ type: 'enum', enum: MENU_TYPE })
-  menu_type: MENU_TYPE;
+  @Column({ type: 'enum', enum: MenuType })
+  menu_type: MenuType;
 
   @Column({ default: 0 })
   price: number;

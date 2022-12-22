@@ -1,11 +1,10 @@
-/* eslint-disable prettier/prettier */
 import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Socket, Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
 interface SocketRequest {
   message: string;

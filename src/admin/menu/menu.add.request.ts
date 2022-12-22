@@ -5,13 +5,7 @@ import {
   IsOptional,
   MaxLength,
 } from 'class-validator';
-import { Menu } from '../../model/menu';
-enum MenuType {
-  APPETIZER = 'appetizer',
-  MAIN = 'main',
-  DESSERT = 'dessert',
-  DRINK = 'DRINK',
-}
+import { MenuType } from '../../entities/menu.entity';
 export class MenuAddRequest {
   @IsNotEmpty()
   @MaxLength(100)
@@ -22,11 +16,7 @@ export class MenuAddRequest {
 
   @IsOptional()
   @IsNumber()
-  price: number;
-
-  toMenu(): Menu {
-    return new Menu(this.menu_name, this.menu_type, this.price);
-  }
+  price?: number;
 
   constructor() {
     this.menu_name = null;

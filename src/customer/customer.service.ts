@@ -8,7 +8,7 @@ export class CustomerService {
   constructor(private customersRepository: CustomerRepository) {}
 
   async create(customer: Customer): Promise<Result> {
-    let found = await this.customersRepository.getById(
+    let found = await this.customersRepository.getByLoginId(
       customer.loginId.toString(),
     );
     if (found != null) {
