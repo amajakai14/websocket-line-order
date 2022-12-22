@@ -21,26 +21,28 @@ export class LoginService {
       request.loginId,
     );
     if (customerEntity == null) {
-      const result = Result.BAD(
-        HttpStatus.BAD_REQUEST,
-        'ID or Password are incorrect',
-      );
-      return new LoginResponse(new Token(null), result);
+      return this.invalidLoginResponse();
     }
     const validate = await this.validatePasswordOf(request, customerEntity);
     if (!validate) {
-      const result = Result.BAD(
-        HttpStatus.BAD_REQUEST,
-        'ID or Password are incorrect',
-      );
-      return new LoginResponse(new Token(null), result);
+      return this.invalidLoginResponse();
     }
 
     const secret = this.environmentConfig.get('JWT_SECRET');
-    console.log('secret', secret);
-    const token = new Token(sign(request, secret, { expiresIn: 600 }));
-    console.log('token', token);
+    const token = new Token(
+      sign({ customerId: customerEntity.customer_id }, secret, {
+        expiresIn: 600,
+      }),
+    );
     return new LoginResponse(token, Result.OK());
+  }
+
+  private invalidLoginResponse(): LoginResponse {
+    const result = Result.BAD(
+      HttpStatus.BAD_REQUEST,
+      'ID or Password are incorrect',
+    );
+    return new LoginResponse(new Token(null), result);
   }
 
   async validatePasswordOf(

@@ -1,5 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MenuModule } from './admin/menu/menu.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EnvironmentConfig } from './config/env.config';
@@ -9,7 +10,6 @@ import { LoginModule } from './login/login.module';
 import { AuthenticationMiddleware } from './middleware/authentication.middleware';
 import { OrderModule } from './order/order.module';
 import { EventsGateway } from './socket/socket.gateway';
-import { MenuModule } from './admin/menu/menu.module';
 
 @Module({
   imports: [
@@ -25,6 +25,6 @@ import { MenuModule } from './admin/menu/menu.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthenticationMiddleware).forRoutes('order');
+    consumer.apply(AuthenticationMiddleware).forRoutes('/admin/menu');
   }
 }

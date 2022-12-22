@@ -1,9 +1,9 @@
 import { HttpStatus } from '@nestjs/common';
 
 export class Result {
-  readonly isSuccess: boolean;
-  readonly httpStatus?: HttpStatus;
-  readonly errorMessage?: string;
+  isSuccess: boolean;
+  httpStatus?: HttpStatus;
+  errorMessage?: string;
 
   constructor(isSuccess: boolean, error?: HttpStatus, errorMessage?: string) {
     this.isSuccess = isSuccess;

@@ -4,9 +4,9 @@ import { MailAddress } from './mailaddress';
 import { Password } from './password';
 
 export class Customer {
-  readonly loginId: LoginId;
-  readonly mailAddress: MailAddress;
-  readonly password: Password;
+  loginId: LoginId;
+  mailAddress: MailAddress;
+  password: Password;
 
   async toEntity(): Promise<CustomerEntity> {
     const customer = new CustomerEntity();

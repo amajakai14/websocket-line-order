@@ -1,15 +1,15 @@
 export class MailAddress {
-  private readonly _mailAddress: string;
+  mailAddress: string;
 
   isEqual(that: string): boolean {
-    return this._mailAddress === that;
+    return this.mailAddress === that;
   }
 
   toString(): string {
-    return this._mailAddress;
+    return this.mailAddress;
   }
 
   constructor(mailAddress: string) {
-    this._mailAddress = mailAddress.toLowerCase();
+    this.mailAddress = mailAddress.toLowerCase();
   }
 }

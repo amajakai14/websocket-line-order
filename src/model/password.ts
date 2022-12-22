@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 export class Password {
-  readonly password: string;
+  password: string;
 
   private readonly saltRounds = 10;
 

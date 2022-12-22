@@ -1,9 +1,5 @@
 export class Token {
-  readonly token: string;
-
-  toString(): string {
-    return this.token;
-  }
+  token: string;
 
   constructor(token: string) {
     this.token = token;
