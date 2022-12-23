@@ -3,9 +3,10 @@ jobs:
   build:
     working_directory: ~/websocket-line-order
     docker:
-      - image: circleci/node:16.15.1
+      - image: cimg/node:19.3.0
     steps:
       - checkout
+      - run node --version
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
