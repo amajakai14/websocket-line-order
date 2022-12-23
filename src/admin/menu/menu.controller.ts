@@ -19,6 +19,12 @@ export class MenuController {
 
   toMenu(req: MenuAddRequest): Menu {
     const price = req.price == null ? 0 : req.price;
-    return new Menu(MenuId.empty(), req.menu_name, req.menu_type, price);
+    return new Menu(
+      MenuId.empty(),
+      req.menu_name,
+      req.menu_type,
+      price,
+      CustomerId.empty(),
+    );
   }
 }
