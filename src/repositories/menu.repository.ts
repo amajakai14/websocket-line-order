@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MenuEntity } from '../entities/menu.entity';
+import { CustomerId } from '../model/customer-id';
 import { Menu } from '../model/menu';
 import { MenuId } from '../model/menu-id';
 
@@ -20,7 +21,7 @@ export class MenuRepository {
     const menusEntity: MenuEntity[] = await this.sessionRepository.findBy({
       course_id,
     });
-    if (menusEntity.length === 0) return [Menu.empty()];
+    if (menusEntity.length === 0) return [];
     return menusEntity.map((menuEntity) => this.toMenu(menuEntity));
   }
 
@@ -30,6 +31,7 @@ export class MenuRepository {
       menuEntity.menu_name,
       menuEntity.menu_type,
       menuEntity.price,
+      new CustomerId(menuEntity.course_id),
     );
   }
 }

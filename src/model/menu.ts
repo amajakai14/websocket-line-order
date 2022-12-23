@@ -1,4 +1,5 @@
 import { MenuEntity, MenuType } from '../entities/menu.entity';
+import { CustomerId } from './customer-id';
 import { MenuId } from './menu-id';
 
 export class Menu {
@@ -6,16 +7,30 @@ export class Menu {
   name: string;
   menuType: MenuType;
   price: number;
+  customerId: CustomerId;
 
-  constructor(menuId: MenuId, name: string, menuType: MenuType, price: number) {
+  constructor(
+    menuId: MenuId,
+    name: string,
+    menuType: MenuType,
+    price: number,
+    customerId: CustomerId,
+  ) {
     this.menuId = menuId;
     this.name = name;
     this.menuType = menuType;
     this.price = price;
+    this.customerId = customerId;
   }
 
   static empty() {
-    return new Menu(MenuId.empty(), '', MenuType.INVALID, -1);
+    return new Menu(
+      MenuId.empty(),
+      '',
+      MenuType.INVALID,
+      -1,
+      CustomerId.empty(),
+    );
   }
 
   toEntity(): MenuEntity {
