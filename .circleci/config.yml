@@ -1,4 +1,11 @@
 version: 2
+workflows:
+  build:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
 jobs:
   build:
     working_directory: ~/websocket-line-order
