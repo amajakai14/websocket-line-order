@@ -4,6 +4,7 @@ export enum MenuType {
   MAIN = 'MAIN',
   DESSERT = 'DESSERT',
   DRINK = 'DRINK',
+  INVALID = 'INVALID',
 }
 
 @Entity('mock_menu')
