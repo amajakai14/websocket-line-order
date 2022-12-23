@@ -6,7 +6,7 @@ jobs:
       - image: cimg/node:19.3.0
     steps:
       - checkout
-      - run node --version
+      - run: node --version
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
