@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/websocket-line-order
     docker:
-      - image: circleci/node:12.22.0
+      - image: circleci/node:16.15.1
     steps:
       - checkout
       - restore_cache:
