@@ -13,11 +13,7 @@ jobs:
       - image: cimg/node:19.3.0
     steps:
       - checkout
-      - run:
-          name: Install Docker Compose
-          command: |
-            sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
+      - setup_remote_docker
       - run: node --version
       - run: bash ./local/localdb.sh
       - restore_cache:
