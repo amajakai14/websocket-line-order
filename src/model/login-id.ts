@@ -5,6 +5,10 @@ export class LoginId {
     return this.loginId === that;
   }
 
+  toString(): string {
+    return this.loginId;
+  }
+
   constructor(loginId: string) {
     this.loginId = loginId.toLowerCase();
   }

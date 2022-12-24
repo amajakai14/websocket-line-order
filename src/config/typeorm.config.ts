@@ -20,6 +20,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
       synchronize: false,
       logging: true,
+      autoLoadEntities: true,
     };
   },
 };
@@ -35,6 +36,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
   synchronize: false,
   logging: true,
+  autoLoadEntities: true,
 };
 
 export function dataSourceConfig() {

@@ -5,10 +5,10 @@ import { CustomerRepository } from '../repositories/customer.repository';
 
 @Injectable()
 export class CustomerService {
-  constructor(private customersRepository: CustomerRepository) {}
+  constructor(private readonly customerRepository: CustomerRepository) {}
 
   async create(customer: Customer): Promise<Result> {
-    let found = await this.customersRepository.getByLoginId(
+    let found = await this.customerRepository.getByLoginId(
       customer.loginId.toString(),
     );
     if (found != null) {
@@ -18,7 +18,7 @@ export class CustomerService {
       );
     }
 
-    found = await this.customersRepository.getByEmail(
+    found = await this.customerRepository.getByEmail(
       customer.mailAddress.toString(),
     );
     if (found != null) {
@@ -28,6 +28,6 @@ export class CustomerService {
       );
     }
 
-    return this.customersRepository.register(await customer.toEntity());
+    return this.customerRepository.register(await customer.toEntity());
   }
 }
