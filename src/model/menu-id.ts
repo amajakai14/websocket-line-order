@@ -1,5 +1,5 @@
 export class MenuId {
-  menuId: number;
+  menuId!: number;
   static readonly INVALID_ID = -1;
 
   value(): number {

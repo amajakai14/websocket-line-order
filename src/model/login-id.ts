@@ -1,5 +1,5 @@
 export class LoginId {
-  loginId: string;
+  loginId!: string;
 
   isEqual(that: string): boolean {
     return this.loginId === that;
@@ -7,6 +7,10 @@ export class LoginId {
 
   toString(): string {
     return this.loginId;
+  }
+
+  isEmpty(): boolean {
+    return this.loginId === '';
   }
 
   constructor(loginId: string) {

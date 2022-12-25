@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 export class Password {
-  password: string;
+  password!: string;
 
   private readonly saltRounds = 10;
 
@@ -11,6 +11,11 @@ export class Password {
   async compareHashed(hashedPassword: string): Promise<boolean> {
     return await bcrypt.compare(this.password, hashedPassword);
   }
+
+  isEmpty(): boolean {
+    return this.password === '';
+  }
+
   constructor(password: string) {
     this.password = password;
   }

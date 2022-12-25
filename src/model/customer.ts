@@ -19,7 +19,16 @@ export class Customer {
   }
 
   isValid(): boolean {
-    return this.customerId.isValid();
+    return this.customerId.isEmpty();
+  }
+
+  isEmpty(): boolean {
+    return (
+      this.customerId.isEmpty() &&
+      this.loginId.isEmpty() &&
+      this.mailAddress.isEmpty() &&
+      this.password.isEmpty()
+    );
   }
 
   static empty() {

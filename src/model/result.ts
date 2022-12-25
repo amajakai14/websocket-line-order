@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 
 export class Result {
-  isSuccess: boolean;
+  isSuccess!: boolean;
   httpStatus?: HttpStatus;
   errorMessage?: string;
 

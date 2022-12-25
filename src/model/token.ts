@@ -1,5 +1,5 @@
 export class Token {
-  token: string;
+  token!: string;
 
   constructor(token: string) {
     this.token = token;

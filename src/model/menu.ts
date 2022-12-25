@@ -3,11 +3,11 @@ import { CustomerId } from './customer-id';
 import { MenuId } from './menu-id';
 
 export class Menu {
-  menuId: MenuId;
-  name: string;
-  menuType: MenuType;
-  price: number;
-  customerId: CustomerId;
+  menuId!: MenuId;
+  name!: string;
+  menuType!: MenuType;
+  price!: number;
+  customerId!: CustomerId;
 
   constructor(
     menuId: MenuId,

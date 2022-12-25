@@ -1,5 +1,5 @@
 export class MailAddress {
-  mailAddress: string;
+  mailAddress!: string;
 
   isEqual(that: string): boolean {
     return this.mailAddress === that;
@@ -7,6 +7,10 @@ export class MailAddress {
 
   toString(): string {
     return this.mailAddress;
+  }
+
+  isEmpty(): boolean {
+    return this.mailAddress === '';
   }
 
   constructor(mailAddress: string) {

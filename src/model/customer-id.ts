@@ -1,5 +1,5 @@
 export class CustomerId {
-  customerId: number;
+  customerId!: number;
   static readonly INVALID_ID = -1;
 
   value(): number {
@@ -10,7 +10,7 @@ export class CustomerId {
     return new CustomerId(this.INVALID_ID);
   }
 
-  isValid(): boolean {
+  isEmpty(): boolean {
     return this.customerId != CustomerId.INVALID_ID;
   }
 
