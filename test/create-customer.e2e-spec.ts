@@ -14,51 +14,53 @@ describe('createCustomer (e2e)', () => {
   let app: INestApplication;
   let repository: Repository<CustomerEntity>;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
-    await dataSource.initialize();
     app = moduleFixture.createNestApplication();
     app.useGlobalFilters(new CustomExceptionFilter());
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
+    await app.init();
+    await dataSource.initialize();
+  });
+
+  beforeEach(async () => {
     repository = await dataSource.getRepository(CustomerEntity);
     await repository.clear();
 
     const sqlTestPath = path.join(__dirname, 'testsql/customer-initial.sql');
-    console.log('testPath', sqlTestPath);
     const testSql = fs.readFileSync(sqlTestPath, 'utf8');
     await dataSource.query(testSql);
-
-    await app.init();
   });
 
   afterEach(async () => {
-    await dataSource.destroy();
+    console.log('afte each');
   });
 
   afterAll(async () => {
+    await dataSource.destroy();
     await app.close();
   });
 
-  const getCustomerData = async () => {
+  const getCustomerData = async (login_id: string) => {
     repository = dataSource.getRepository(CustomerEntity);
-    const records = repository.find();
-    console.log('records: ', records);
-    return records;
+    const record = await repository.findOneBy({ login_id });
+    return record;
   };
 
   it('success', async () => {
     const req: CreateCustomerRequest = {
       loginId: 'IamIronman',
       password: 'password',
-      mailAddress: 'ironman@example.com',
+      mailAddress: 'iRonMaN@example.com',
     };
     await request(app.getHttpServer()).post('/customer').send(req).expect(201);
-    const record = await getCustomerData();
-    console.log('get record: ', record);
+    const record = await getCustomerData('iamironman');
+    expect(record).not.toBeNull();
+    expect(record.email).toBe('ironman@example.com');
   });
 
   it('fail: cause of login id is too short', async () => {
