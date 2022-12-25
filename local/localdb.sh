@@ -19,3 +19,6 @@ fi
 # Run the container
 echo "run container"
 docker run -d --name linemenu-postgres-container -p 5432:5432 linemenu-postgres-image
+
+echo "add migration"
+npm run migration:run
