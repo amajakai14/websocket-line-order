@@ -17,7 +17,7 @@ export class AuthenticationMiddleware implements NestMiddleware {
     const [type, token] = authen.split(' ');
     const secret = this.environmentConfig.get('JWT_SECRET');
 
-    if (!token) {
+    if (!token || type !== 'Bearer') {
       res.status(HttpStatus.UNAUTHORIZED).send('No token provided');
       return;
     }

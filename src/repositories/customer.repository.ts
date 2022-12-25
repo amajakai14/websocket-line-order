@@ -6,8 +6,9 @@ import { Result } from '../model/result';
 
 export class CustomerRepository {
   async getByCustomerId(customer_id: number): Promise<Customer> {
-    const repository = dataSource.getRepository(CustomerEntity);
-    const customerEntity = await repository.findOneBy({ customer_id });
+    const customerEntity = await dataSource.manager.findOneBy(CustomerEntity, {
+      customer_id,
+    });
     return Customer.of(customerEntity);
   }
 

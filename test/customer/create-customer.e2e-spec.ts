@@ -4,11 +4,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as request from 'supertest';
 import { Repository } from 'typeorm';
-import { AppModule } from '../src/app.module';
-import { dataSource } from '../src/config/typeorm.datasource';
-import { CreateCustomerRequest } from '../src/customer/customer.create.request';
-import { CustomerEntity } from '../src/entities/customer.entity';
-import { CustomExceptionFilter } from '../src/utils/filter/custom-exception.filter';
+import { AppModule } from '../../src/app.module';
+import { dataSource } from '../../src/config/typeorm.datasource';
+import { CreateCustomerRequest } from '../../src/customer/customer.create.request';
+import { CustomerEntity } from '../../src/entities/customer.entity';
+import { CustomExceptionFilter } from '../../src/utils/filter/custom-exception.filter';
 
 describe('createCustomer (e2e)', () => {
   let app: INestApplication;
@@ -25,19 +25,17 @@ describe('createCustomer (e2e)', () => {
 
     await app.init();
     await dataSource.initialize();
+    repository = await dataSource.getRepository(CustomerEntity);
+    await repository.clear();
   });
 
   beforeEach(async () => {
-    repository = await dataSource.getRepository(CustomerEntity);
     await repository.clear();
 
-    const sqlTestPath = path.join(__dirname, 'testsql/customer-initial.sql');
+    const testPath = path.dirname(__dirname);
+    const sqlTestPath = path.join(testPath, '/testsql/customer-initial.sql');
     const testSql = fs.readFileSync(sqlTestPath, 'utf8');
     await dataSource.query(testSql);
-  });
-
-  afterEach(async () => {
-    console.log('afte each');
   });
 
   afterAll(async () => {

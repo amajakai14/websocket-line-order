@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { dataSource } from '../config/typeorm.datasource';
 import { MenuEntity } from '../entities/menu.entity';
 import { CustomerId } from '../model/customer-id';
 import { Menu } from '../model/menu';
@@ -8,19 +7,15 @@ import { MenuId } from '../model/menu-id';
 
 @Injectable()
 export class MenuRepository {
-  constructor(
-    @InjectRepository(MenuEntity)
-    private readonly sessionRepository: Repository<MenuEntity>,
-  ) {}
-
   async createMenuOf(menuEntity: MenuEntity): Promise<void> {
-    this.sessionRepository.insert(menuEntity);
+    await dataSource.manager.insert(MenuEntity, menuEntity);
   }
 
   async getMenuListOf(course_id: number): Promise<Menu[]> {
-    const menusEntity: MenuEntity[] = await this.sessionRepository.findBy({
-      course_id,
-    });
+    const menusEntity: MenuEntity[] = await dataSource.manager.findBy(
+      MenuEntity,
+      { course_id },
+    );
     if (menusEntity.length === 0) return [];
     return menusEntity.map((menuEntity) => this.toMenu(menuEntity));
   }
