@@ -1,14 +1,16 @@
-import { HttpStatus } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { dataSource } from '../config/typeorm.datasource';
 import { CustomerEntity } from '../entities/customer.entity';
 import { Customer } from '../model/customer';
 import { Result } from '../model/result';
 
+@Injectable()
 export class CustomerRepository {
   async getByCustomerId(customer_id: number): Promise<Customer> {
     const customerEntity = await dataSource.manager.findOneBy(CustomerEntity, {
       customer_id,
     });
+    if (customerEntity == null) return Customer.empty();
     return Customer.of(customerEntity);
   }
 

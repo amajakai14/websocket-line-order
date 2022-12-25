@@ -11,7 +11,7 @@ export class CustomerId {
   }
 
   isEmpty(): boolean {
-    return this.customerId != CustomerId.INVALID_ID;
+    return this.customerId == CustomerId.INVALID_ID;
   }
 
   constructor(customerId: number) {

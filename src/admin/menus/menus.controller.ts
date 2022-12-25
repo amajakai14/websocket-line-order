@@ -1,12 +1,16 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
+import { CustomerId } from '../../model/customer-id';
 import { Menu } from '../../model/menu';
 import { MenusService } from './menus.service';
 
-@Controller('menus')
+@Controller('admin/menus')
 export class MenusController {
   constructor(private readonly service: MenusService) {}
+
   @Get()
-  menus(@Body() token): Menu[] {
-    return [Menu.empty()];
+  async menus(@Req() req): Promise<Menu[]> {
+    const decoded: CustomerId = req.app.locals.decoded;
+    console.log('decoed: ', decoded);
+    return await this.service.menusOf(decoded.customerId);
   }
 }

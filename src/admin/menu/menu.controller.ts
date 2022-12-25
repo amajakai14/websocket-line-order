@@ -9,9 +9,8 @@ import { MenuService } from './menu.service';
 export class MenuController {
   constructor(private readonly service: MenuService) {}
   @Post()
-  getOrder(@Req() req, @Body() menuAddRequest: MenuAddRequest): string {
+  createMenu(@Req() req, @Body() menuAddRequest: MenuAddRequest): string {
     const decoded: CustomerId = req.app.locals.decoded;
-    console.log('body', menuAddRequest);
     this.service.createMenu(decoded, this.toMenu(menuAddRequest));
 
     return 'hello from order but you need an Authen';

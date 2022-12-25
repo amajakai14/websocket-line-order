@@ -11,12 +11,12 @@ export class MenuRepository {
     await dataSource.manager.insert(MenuEntity, menuEntity);
   }
 
-  async getMenuListOf(course_id: number): Promise<Menu[]> {
+  async getMenuListOf(customer_id: number): Promise<Menu[]> {
     const menusEntity: MenuEntity[] = await dataSource.manager.findBy(
       MenuEntity,
-      { course_id },
+      { customer_id },
     );
-    if (menusEntity.length === 0) return [];
+    if (menusEntity.length === 0) return [Menu.empty()];
     return menusEntity.map((menuEntity) => this.toMenu(menuEntity));
   }
 
@@ -26,7 +26,7 @@ export class MenuRepository {
       menuEntity.menu_name,
       menuEntity.menu_type,
       menuEntity.price,
-      new CustomerId(menuEntity.course_id),
+      new CustomerId(menuEntity.customer_id),
     );
   }
 }

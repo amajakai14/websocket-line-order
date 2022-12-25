@@ -5,14 +5,14 @@ import { MenuId } from './menu-id';
 export class Menu {
   menuId!: MenuId;
   name!: string;
-  menuType!: MenuType;
+  menuType!: string;
   price!: number;
   customerId!: CustomerId;
 
   constructor(
     menuId: MenuId,
     name: string,
-    menuType: MenuType,
+    menuType: string,
     price: number,
     customerId: CustomerId,
   ) {

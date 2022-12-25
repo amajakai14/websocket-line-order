@@ -29,6 +29,8 @@ import { EventsGateway } from './socket/socket.gateway';
 export class AppModule implements NestModule {
   constructor(private dataSource: DataSource) {}
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthenticationMiddleware).forRoutes('/admin/menu');
+    consumer
+      .apply(AuthenticationMiddleware)
+      .forRoutes('/admin/menu', '/admin/menus');
   }
 }
