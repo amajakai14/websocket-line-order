@@ -1,11 +1,15 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from '../model/customer';
 import { Result } from '../model/result';
 import { CustomerRepository } from '../repositories/customer.repository';
 
 @Injectable()
 export class CustomerService {
-  constructor(private readonly customerRepository: CustomerRepository) {}
+  constructor(
+    @InjectRepository(CustomerRepository)
+    private readonly customerRepository: CustomerRepository,
+  ) {}
 
   async create(customer: Customer): Promise<Result> {
     let found = await this.customerRepository.getByLoginId(

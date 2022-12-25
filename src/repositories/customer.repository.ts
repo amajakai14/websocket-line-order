@@ -1,27 +1,25 @@
 import { HttpStatus } from '@nestjs/common';
-import { dataSource } from '../config/typeorm.datasource';
+import { Repository } from 'typeorm';
 import { CustomerEntity } from '../entities/customer.entity';
 import { Customer } from '../model/customer';
 import { Result } from '../model/result';
 
-export class CustomerRepository {
+export class CustomerRepository extends Repository<CustomerEntity> {
   async getByCustomerId(customer_id: number): Promise<Customer> {
-    const repository = dataSource.getRepository(CustomerEntity);
-    const customerEntity = await repository.findOneBy({ customer_id });
+    const customerEntity = await this.findOneBy({ customer_id });
     return Customer.of(customerEntity);
   }
 
   async getByLoginId(login_id: string): Promise<CustomerEntity> {
-    return dataSource.manager.findOneBy(CustomerEntity, { login_id });
+    return this.findOneBy({ login_id });
   }
 
   async getByEmail(email: string): Promise<CustomerEntity> {
-    return dataSource.manager.findOneBy(CustomerEntity, { email });
+    return this.findOneBy({ email });
   }
 
   async register(customerEntity: CustomerEntity): Promise<Result> {
-    return dataSource.manager
-      .insert(CustomerEntity, customerEntity)
+    return this.insert(customerEntity)
       .then(Result.OK)
       .catch((err) => new Result(false, HttpStatus.SERVICE_UNAVAILABLE, err));
   }
