@@ -22,7 +22,20 @@ export class Customer {
     return this.customerId.isValid();
   }
 
+  static empty() {
+    return new Customer(
+      CustomerId.empty(),
+      new LoginId(''),
+      new MailAddress(''),
+      new Password(''),
+    );
+  }
+
   static of(customerEntity: CustomerEntity): Customer {
+    if (customerEntity == null) {
+      return Customer.empty();
+    }
+
     const customerId =
       customerEntity.customer_id == null
         ? CustomerId.INVALID_ID
