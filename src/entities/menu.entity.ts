@@ -15,8 +15,8 @@ export class MenuEntity extends BaseEntity {
   @Column()
   menu_name: string;
 
-  @Column({ type: 'enum', enum: MenuType })
-  menu_type: MenuType;
+  @Column()
+  menu_type: string;
 
   @Column({ default: 0 })
   price: number;
@@ -25,5 +25,5 @@ export class MenuEntity extends BaseEntity {
   available: boolean;
 
   @Column()
-  course_id: number;
+  customer_id: number;
 }
