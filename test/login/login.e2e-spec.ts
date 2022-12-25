@@ -1,10 +1,11 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import * as fs from 'fs';
+import * as path from 'path';
 import * as request from 'supertest';
 import { Repository } from 'typeorm';
 import { AppModule } from '../../src/app.module';
 import { dataSource } from '../../src/config/typeorm.datasource';
-import { CreateCustomerRequest } from '../../src/customer/customer.create.request';
 import { CustomerEntity } from '../../src/entities/customer.entity';
 import { LoginRequest } from '../../src/login/login.request';
 import { CustomExceptionFilter } from '../../src/utils/filter/custom-exception.filter';
@@ -12,12 +13,6 @@ import { CustomExceptionFilter } from '../../src/utils/filter/custom-exception.f
 describe('createCustomer (e2e)', () => {
   let app: INestApplication;
   let repository: Repository<CustomerEntity>;
-
-  const mockUser: CreateCustomerRequest = {
-    loginId: 'sample_user2',
-    password: 'password',
-    mailAddress: 'sample_user2@example.com',
-  };
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -33,11 +28,15 @@ describe('createCustomer (e2e)', () => {
     await repository.clear();
 
     await app.init();
+  });
 
-    await request(app.getHttpServer())
-      .post('/customer')
-      .send(mockUser)
-      .expect(201);
+  beforeEach(async () => {
+    await repository.clear();
+
+    const testPath = path.dirname(__dirname);
+    const sqlTestPath = path.join(testPath, '/testsql/customer-initial.sql');
+    const testSql = fs.readFileSync(sqlTestPath, 'utf8');
+    await dataSource.query(testSql);
   });
 
   afterAll(async () => {
