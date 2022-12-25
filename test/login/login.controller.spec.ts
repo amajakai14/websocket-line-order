@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EnvironmentConfig } from '../config/env.config';
-import { CustomerRepository } from '../repositories/customer.repository';
-import { LoginController } from './login.controller';
-import { LoginService } from './login.service';
+import { EnvironmentConfig } from '../../src/config/env.config';
+import { LoginController } from '../../src/login/login.controller';
+import { LoginService } from '../../src/login/login.service';
+import { CustomerRepository } from '../../src/repositories/customer.repository';
 
 describe('LoginController', () => {
   let controller: LoginController;
