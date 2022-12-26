@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as request from 'supertest';
 import { AppModule } from '../../../src/app.module';
 import { LoginRequest } from '../../../src/login/login.request';
+import { Menu } from '../../../src/model/menu';
 import { PrismaService } from '../../../src/prisma/prisma.service';
 import { CustomExceptionFilter } from '../../../src/utils/filter/custom-exception.filter';
 
@@ -43,22 +44,40 @@ describe('menus (e2e)', () => {
     await app.close();
   });
 
-  async function login(): Promise<string> {
-    const req: LoginRequest = {
-      loginId: 'sample_user2',
-      password: 'password',
-    };
-
+  async function login(req: LoginRequest): Promise<string> {
     const response = await request(app.getHttpServer())
       .post('/login')
       .send(req);
     return response.body.token;
   }
+
   it('success', async () => {
-    const token = await login();
+    const req: LoginRequest = {
+      loginId: 'sample_user2',
+      password: 'password',
+    };
+
+    const token = await login(req);
     const response = await request(app.getHttpServer())
       .get('/admin/menus')
       .set({ authorization: 'Bearer ' + token });
-    console.log('result', response.body);
+    const menuList: Menu[] = response.body;
+    expect(response.statusCode).toBe(200);
+    expect(menuList.length).toBe(3);
+  });
+
+  it('have not register any menu yet', async () => {
+    const req: LoginRequest = {
+      loginId: 'sample_user3',
+      password: 'password',
+    };
+
+    const token = await login(req);
+    const response = await request(app.getHttpServer())
+      .get('/admin/menus')
+      .set({ authorization: 'Bearer ' + token });
+    const menuList: Menu[] = response.body;
+    expect(response.statusCode).toBe(200);
+    expect(menuList.length).toBe(0);
   });
 });
