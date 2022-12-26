@@ -13,7 +13,8 @@ export class CustomExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse();
     const request = ctx.getRequest();
 
-    const status = exception.getStatus() == null ? 500 : exception.getStatus();
+    console.log('err: ', exception);
+    const status = isHttpException ? exception.getStatus() : 500;
 
     const message = isHttpException
       ? exception.getResponse()['message']

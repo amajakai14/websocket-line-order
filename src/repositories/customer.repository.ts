@@ -1,31 +1,47 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { dataSource } from '../config/typeorm.datasource';
-import { CustomerEntity } from '../entities/customer.entity';
+import { Injectable } from '@nestjs/common';
+import { tbl_customer } from '@prisma/client';
 import { Customer } from '../model/customer';
-import { Result } from '../model/result';
+import { PrismaService } from './../prisma/prisma.service';
 
 @Injectable()
 export class CustomerRepository {
-  async getByCustomerId(customer_id: number): Promise<Customer> {
-    const customerEntity = await dataSource.manager.findOneBy(CustomerEntity, {
-      customer_id,
+  constructor(private prisma: PrismaService) {}
+
+  async getByCustomerId(id: number): Promise<Customer> {
+    const customer: tbl_customer = await this.prisma.tbl_customer.findFirst({
+      where: { id },
     });
-    if (customerEntity == null) return Customer.empty();
-    return Customer.of(customerEntity);
+
+    if (customer == null) return Customer.empty();
+    return Customer.of(customer);
   }
 
-  async getByLoginId(login_id: string): Promise<CustomerEntity> {
-    return dataSource.manager.findOneBy(CustomerEntity, { login_id });
+  async getByLoginId(login_id: string): Promise<Customer> {
+    const customer: tbl_customer = await this.prisma.tbl_customer.findFirst({
+      where: { login_id },
+    });
+    if (customer == null) return Customer.empty();
+    return Customer.of(customer);
   }
 
-  async getByEmail(email: string): Promise<CustomerEntity> {
-    return dataSource.manager.findOneBy(CustomerEntity, { email });
+  async getByEmail(mail_address: string): Promise<Customer> {
+    const customer: tbl_customer = await this.prisma.tbl_customer.findFirst({
+      where: { mail_address },
+    });
+    if (customer == null) return Customer.empty();
+    return Customer.of(customer);
   }
 
-  async register(customerEntity: CustomerEntity): Promise<Result> {
-    return dataSource.manager
-      .insert(CustomerEntity, customerEntity)
-      .then(Result.OK)
-      .catch((err) => new Result(false, HttpStatus.SERVICE_UNAVAILABLE, err));
+  async register(customer: Customer): Promise<Customer> {
+    const result = await this.prisma.tbl_customer.create({
+      data: {
+        login_id: customer.loginId.toString(),
+        password: await customer.password.hash(),
+        mail_address: customer.mailAddress.toString(),
+      },
+    });
+    console.log('result of register', result);
+    if (result == null) return Customer.empty();
+    return Customer.of(result);
   }
 }

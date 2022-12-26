@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "customer" (
+CREATE TABLE "tbl_customer" (
     "id" SERIAL NOT NULL,
     "mail_address" TEXT NOT NULL,
     "login_id" TEXT NOT NULL,
@@ -7,20 +7,20 @@ CREATE TABLE "customer" (
     "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
 
-    CONSTRAINT "customer_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "tbl_customer_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "table" (
+CREATE TABLE "tbl_table" (
     "id" SERIAL NOT NULL,
     "table_name" TEXT NOT NULL,
     "customer_id" INTEGER NOT NULL,
 
-    CONSTRAINT "table_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "tbl_table_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "menu" (
+CREATE TABLE "tbl_menu" (
     "id" SERIAL NOT NULL,
     "menu_name" TEXT NOT NULL,
     "menu_type" TEXT NOT NULL,
@@ -30,11 +30,11 @@ CREATE TABLE "menu" (
     "updated_at" TIMESTAMP(3),
     "customer_id" INTEGER NOT NULL,
 
-    CONSTRAINT "menu_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "tbl_menu_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "course" (
+CREATE TABLE "tbl_course" (
     "id" SERIAL NOT NULL,
     "course_name" TEXT NOT NULL,
     "course_timelimit" INTEGER DEFAULT 90,
@@ -43,11 +43,11 @@ CREATE TABLE "course" (
     "updated_at" TIMESTAMP(3),
     "customer_id" INTEGER NOT NULL,
 
-    CONSTRAINT "course_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "tbl_course_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "channel_provider" (
+CREATE TABLE "tbl_channel_provider" (
     "id" TEXT NOT NULL,
     "table_id" INTEGER NOT NULL,
     "customer_id" INTEGER NOT NULL,
@@ -56,11 +56,11 @@ CREATE TABLE "channel_provider" (
     "time_start" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "time_end" TIMESTAMP(3),
 
-    CONSTRAINT "channel_provider_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "tbl_channel_provider_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "order" (
+CREATE TABLE "tbl_order" (
     "id" SERIAL NOT NULL,
     "menu_id" TEXT NOT NULL,
     "order_amount" INTEGER NOT NULL,
@@ -70,29 +70,29 @@ CREATE TABLE "order" (
     "updated_at" TIMESTAMP(3),
     "channel_id" TEXT NOT NULL,
 
-    CONSTRAINT "order_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "tbl_order_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "customer_mail_address_key" ON "customer"("mail_address");
+CREATE UNIQUE INDEX "tbl_customer_mail_address_key" ON "tbl_customer"("mail_address");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "customer_login_id_key" ON "customer"("login_id");
+CREATE UNIQUE INDEX "tbl_customer_login_id_key" ON "tbl_customer"("login_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "channel_provider_id_key" ON "channel_provider"("id");
+CREATE UNIQUE INDEX "tbl_channel_provider_id_key" ON "tbl_channel_provider"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "channel_provider_customer_id_table_id_key" ON "channel_provider"("customer_id", "table_id");
+CREATE UNIQUE INDEX "tbl_channel_provider_customer_id_table_id_key" ON "tbl_channel_provider"("customer_id", "table_id");
 
 -- AddForeignKey
-ALTER TABLE "table" ADD CONSTRAINT "table_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tbl_table" ADD CONSTRAINT "tbl_table_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "tbl_customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "menu" ADD CONSTRAINT "menu_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tbl_menu" ADD CONSTRAINT "tbl_menu_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "tbl_customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "course" ADD CONSTRAINT "course_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tbl_course" ADD CONSTRAINT "tbl_course_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "tbl_customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "order" ADD CONSTRAINT "order_channel_id_fkey" FOREIGN KEY ("channel_id") REFERENCES "channel_provider"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tbl_order" ADD CONSTRAINT "tbl_order_channel_id_fkey" FOREIGN KEY ("channel_id") REFERENCES "tbl_channel_provider"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

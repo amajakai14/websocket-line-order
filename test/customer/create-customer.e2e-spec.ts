@@ -1,52 +1,46 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { tbl_customer } from '@prisma/client';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as request from 'supertest';
-import { Repository } from 'typeorm';
 import { AppModule } from '../../src/app.module';
-import { dataSource } from '../../src/config/typeorm.datasource';
 import { CreateCustomerRequest } from '../../src/customer/customer.create.request';
-import { CustomerEntity } from '../../src/entities/customer.entity';
 import { CustomExceptionFilter } from '../../src/utils/filter/custom-exception.filter';
+import { PrismaService } from './../../src/prisma/prisma.service';
 
 describe('createCustomer (e2e)', () => {
   let app: INestApplication;
-  let repository: Repository<CustomerEntity>;
+  let prismaService: PrismaService;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
+      providers: [PrismaService],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalFilters(new CustomExceptionFilter());
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
+    prismaService = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
-    await dataSource.initialize();
-    repository = await dataSource.getRepository(CustomerEntity);
-    await repository.clear();
   });
 
   beforeEach(async () => {
-    await repository.clear();
-
+    await prismaService.tbl_customer.deleteMany({});
     const testPath = path.dirname(__dirname);
     const sqlTestPath = path.join(testPath, '/testsql/customer-initial.sql');
     const testSql = fs.readFileSync(sqlTestPath, 'utf8');
-    await dataSource.query(testSql);
+    await prismaService.$executeRawUnsafe(testSql);
   });
 
   afterAll(async () => {
-    await dataSource.destroy();
     await app.close();
   });
 
-  const getCustomerData = async (login_id: string) => {
-    repository = dataSource.getRepository(CustomerEntity);
-    const record = await repository.findOneBy({ login_id });
-    return record;
+  const getCustomerData = async (login_id: string): Promise<tbl_customer> => {
+    return prismaService.tbl_customer.findFirst({ where: { login_id } });
   };
 
   it('success', async () => {
@@ -58,7 +52,7 @@ describe('createCustomer (e2e)', () => {
     await request(app.getHttpServer()).post('/customer').send(req).expect(201);
     const record = await getCustomerData('iamironman');
     expect(record).not.toBeNull();
-    expect(record.email).toBe('ironman@example.com');
+    expect(record.mail_address).toBe('ironman@example.com');
   });
 
   it('fail: cause of login id is too short', async () => {

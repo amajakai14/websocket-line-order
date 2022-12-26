@@ -1,32 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { dataSource } from '../config/typeorm.datasource';
-import { MenuEntity } from '../entities/menu.entity';
-import { CustomerId } from '../model/customer-id';
 import { Menu } from '../model/menu';
-import { MenuId } from '../model/menu-id';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class MenuRepository {
-  async createMenuOf(menuEntity: MenuEntity): Promise<void> {
-    await dataSource.manager.insert(MenuEntity, menuEntity);
+  constructor(private prisma: PrismaService) {}
+
+  async createMenuOf(menu: Menu): Promise<boolean> {
+    const result = await this.prisma.tbl_menu.create({
+      data: {
+        menu_name: menu.name,
+        menu_type: menu.menuType,
+        customer_id: menu.customerId.value(),
+      },
+    });
+    return !(result == null);
   }
 
   async getMenuListOf(customer_id: number): Promise<Menu[]> {
-    const menusEntity: MenuEntity[] = await dataSource.manager.findBy(
-      MenuEntity,
-      { customer_id },
-    );
-    if (menusEntity.length === 0) return [Menu.empty()];
-    return menusEntity.map((menuEntity) => this.toMenu(menuEntity));
-  }
-
-  toMenu(menuEntity: MenuEntity): Menu {
-    return new Menu(
-      new MenuId(menuEntity.menu_id),
-      menuEntity.menu_name,
-      menuEntity.menu_type,
-      menuEntity.price,
-      new CustomerId(menuEntity.customer_id),
-    );
+    const result = await this.prisma.tbl_menu.findMany({
+      where: { customer_id },
+    });
+    if (result == null) return [Menu.empty()];
+    return result.map((menuTable) => Menu.of(menuTable));
   }
 }

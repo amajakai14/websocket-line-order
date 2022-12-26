@@ -17,20 +17,20 @@ export class LoginService {
   ) {}
 
   async login(request: LoginRequest): Promise<LoginResponse> {
-    const customerEntity = await this.customersRepository.getByLoginId(
+    const customer = await this.customersRepository.getByLoginId(
       request.loginId,
     );
-    if (customerEntity == null) {
+    if (customer.isEmpty()) {
       return this.invalidLoginResponse();
     }
-    const validate = await this.validatePasswordOf(request, customerEntity);
+    const validate = await customer.password.compareHashed(request.password);
     if (!validate) {
       return this.invalidLoginResponse();
     }
 
     const secret = this.environmentConfig.get('JWT_SECRET');
     const token = new Token(
-      sign({ customerId: customerEntity.customer_id }, secret, {
+      sign({ customerId: customer.customerId }, secret, {
         expiresIn: 600,
       }),
     );

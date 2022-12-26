@@ -9,69 +9,69 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model customer {
-  id           Int       @id @default(autoincrement())
-  mail_address String    @unique
-  login_id     String    @unique
+model tbl_customer {
+  id           Int          @id @default(autoincrement())
+  mail_address String       @unique
+  login_id     String       @unique
   password     String
-  created_at   DateTime? @default(now())
+  created_at   DateTime?    @default(now())
   updated_at   DateTime?
-  menus        menu[]
-  courses      course[]
-  tables       table[]
+  menus        tbl_menu[]
+  courses      tbl_course[]
+  tables       tbl_table[]
 }
 
-model table {
-  id          Int      @id @default(autoincrement())
+model tbl_table {
+  id          Int          @id @default(autoincrement())
   table_name  String
-  customer    customer @relation(fields: [customer_id], references: [id])
+  customer    tbl_customer @relation(fields: [customer_id], references: [id])
   customer_id Int
 }
 
-model menu {
-  id          Int       @id @default(autoincrement())
+model tbl_menu {
+  id          Int          @id @default(autoincrement())
   menu_name   String
   menu_type   String
-  price       Int       @default(0)
-  available   Boolean   @default(true)
-  created_at  DateTime? @default(now())
+  price       Int          @default(0)
+  available   Boolean      @default(true)
+  created_at  DateTime?    @default(now())
   updated_at  DateTime?
-  customer    customer  @relation(fields: [customer_id], references: [id])
+  customer    tbl_customer @relation(fields: [customer_id], references: [id])
   customer_id Int
 }
 
-model course {
-  id               Int       @id @default(autoincrement())
+model tbl_course {
+  id               Int          @id @default(autoincrement())
   course_name      String
-  course_timelimit Int?      @default(90)
+  course_timelimit Int?         @default(90)
   course_priority  Int?
-  created_at       DateTime? @default(now())
+  created_at       DateTime?    @default(now())
   updated_at       DateTime?
-  customer         customer  @relation(fields: [customer_id], references: [id])
+  customer         tbl_customer @relation(fields: [customer_id], references: [id])
   customer_id      Int
 }
 
-model channel_provider {
-  id          String    @id @unique
+model tbl_channel_provider {
+  id          String      @id @unique
   table_id    Int
   customer_id Int
   course_id   Int
   status      String
-  time_start  DateTime? @default(now())
+  time_start  DateTime?   @default(now())
   time_end    DateTime?
-  orders      order[]
+  orders      tbl_order[]
 
   @@unique([customer_id, table_id])
 }
 
-model order {
-  id           Int              @id @default(autoincrement())
+model tbl_order {
+  id           Int                  @id @default(autoincrement())
   menu_id      String
   order_amount Int
   total_price  Int
   process_type String
-  created_at   DateTime?        @default(now())
+  created_at   DateTime?            @default(now())
   updated_at   DateTime?
-  channels     channel_provider @relation(fields: [channel_id], references: [id])
+  channels     tbl_channel_provider @relation(fields: [channel_id], references: [id])
   channel_id   String
 }

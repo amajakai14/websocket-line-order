@@ -21,6 +21,6 @@ export class MenuService {
     }
 
     console.log('creating new menu');
-    await this.menuRepository.createMenuOf(await menu.toEntity());
+    await this.menuRepository.createMenuOf(await menu);
   }
 }

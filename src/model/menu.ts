@@ -1,3 +1,4 @@
+import { tbl_menu } from '@prisma/client';
 import { MenuEntity, MenuType } from '../entities/menu.entity';
 import { CustomerId } from './customer-id';
 import { MenuId } from './menu-id';
@@ -30,6 +31,16 @@ export class Menu {
       MenuType.INVALID,
       -1,
       CustomerId.empty(),
+    );
+  }
+
+  static of(menuTable: tbl_menu) {
+    return new Menu(
+      new MenuId(menuTable.id),
+      menuTable.menu_name,
+      menuTable.menu_type,
+      menuTable.price,
+      new CustomerId(menuTable.customer_id),
     );
   }
 

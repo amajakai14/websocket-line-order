@@ -1,3 +1,4 @@
+import { tbl_customer } from '@prisma/client';
 import { CustomerEntity } from '../entities/customer.entity';
 import { CustomerId } from './customer-id';
 import { LoginId } from './login-id';
@@ -40,21 +41,12 @@ export class Customer {
     );
   }
 
-  static of(customerEntity: CustomerEntity): Customer {
-    if (customerEntity == null) {
-      return Customer.empty();
-    }
-
-    const customerId =
-      customerEntity.customer_id == null
-        ? CustomerId.INVALID_ID
-        : customerEntity.customer_id;
-
+  static of(customer: tbl_customer): Customer {
     return new Customer(
-      new CustomerId(customerId),
-      new LoginId(customerEntity.login_id),
-      new MailAddress(customerEntity.email),
-      new Password(customerEntity.password),
+      new CustomerId(customer.id),
+      new LoginId(customer.login_id),
+      new MailAddress(customer.mail_address),
+      new Password(customer.password),
     );
   }
 
