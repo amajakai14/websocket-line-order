@@ -1,7 +1,6 @@
 import { Body, Controller, Post, Req } from '@nestjs/common';
 import { CustomerId } from '../../model/customer-id';
 import { Menu } from '../../model/menu';
-import { MenuId } from './../../model/menu-id';
 import { MenuAddRequest } from './menu.add.request';
 import { MenuService } from './menu.service';
 
@@ -18,12 +17,6 @@ export class MenuController {
 
   toMenu(req: MenuAddRequest): Menu {
     const price = req.price == null ? 0 : req.price;
-    return new Menu(
-      MenuId.empty(),
-      req.menu_name,
-      req.menu_type,
-      price,
-      CustomerId.empty(),
-    );
+    return new Menu(-1, req.menu_name, req.menu_type, price, -1);
   }
 }

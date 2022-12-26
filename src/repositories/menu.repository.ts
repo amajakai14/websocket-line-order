@@ -11,7 +11,7 @@ export class MenuRepository {
       data: {
         menu_name: menu.name,
         menu_type: menu.menuType,
-        customer_id: menu.customerId.value(),
+        customer_id: menu.customerId,
       },
     });
     return !(result == null);

@@ -24,7 +24,7 @@ export class MenusResponse {
 
   static of(menu: Menu) {
     new MenusResponse(
-      menu.menuId.value(),
+      menu.menuId,
       menu.name,
       menu.menuType,
       menu.price,

@@ -10,7 +10,6 @@ export class MenusController {
   @Get()
   async menus(@Req() req): Promise<Menu[]> {
     const decoded: CustomerId = req.app.locals.decoded;
-    console.log('decoed: ', decoded);
     return await this.service.menusOf(decoded.customerId);
   }
 }

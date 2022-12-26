@@ -11,8 +11,7 @@ export class MenusService {
   ) {}
   async menusOf(customerId: number): Promise<Menu[]> {
     const user = await this.customerRepository.getByCustomerId(customerId);
-    console.log('user', user);
-    if (user.isValid()) {
+    if (user.isEmpty()) {
       return [Menu.empty()];
     }
     return await this.repository.getMenuListOf(customerId);

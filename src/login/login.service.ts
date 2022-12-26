@@ -28,7 +28,7 @@ export class LoginService {
 
     const secret = this.environmentConfig.get('JWT_SECRET');
     const token = new Token(
-      sign({ customerId: customer.customerId }, secret, {
+      sign({ customerId: customer.customerId.value() }, secret, {
         expiresIn: 600,
       }),
     );

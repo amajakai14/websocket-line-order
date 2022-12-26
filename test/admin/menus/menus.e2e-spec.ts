@@ -27,8 +27,8 @@ describe('menus (e2e)', () => {
   });
 
   beforeEach(async () => {
-    await prismaService.tbl_customer.deleteMany({ where: {} });
     await prismaService.tbl_menu.deleteMany({});
+    await prismaService.tbl_customer.deleteMany({ where: {} });
     const testPath = path.dirname(path.dirname(__dirname));
     const sqlTestPath = path.join(testPath, '/testsql/customer2-initial.sql');
     const sqlMenuPath = path.join(testPath, '/testsql/menu-initial.sql');
@@ -59,6 +59,6 @@ describe('menus (e2e)', () => {
     const response = await request(app.getHttpServer())
       .get('/admin/menus')
       .set({ authorization: 'Bearer ' + token });
-    console.log(response.body);
+    console.log('result', response.body);
   });
 });

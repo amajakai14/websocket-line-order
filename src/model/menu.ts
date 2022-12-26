@@ -1,20 +1,18 @@
 import { tbl_menu } from '@prisma/client';
-import { CustomerId } from './customer-id';
-import { MenuId } from './menu-id';
 
 export class Menu {
-  menuId!: MenuId;
+  menuId!: number;
   name!: string;
   menuType!: string;
   price!: number;
-  customerId!: CustomerId;
+  customerId!: number;
 
   constructor(
-    menuId: MenuId,
+    menuId: number,
     name: string,
     menuType: string,
     price: number,
-    customerId: CustomerId,
+    customerId: number,
   ) {
     this.menuId = menuId;
     this.name = name;
@@ -23,17 +21,21 @@ export class Menu {
     this.customerId = customerId;
   }
 
-  static empty() {
-    return new Menu(MenuId.empty(), '', 'INVALID', -1, CustomerId.empty());
+  static empty(): Menu {
+    return new Menu(-1, '', 'INVALID', -1, -1);
+  }
+
+  isEmpty(): boolean {
+    return this === Menu.empty();
   }
 
   static of(menuTable: tbl_menu) {
     return new Menu(
-      new MenuId(menuTable.id),
+      menuTable.id,
       menuTable.menu_name,
       menuTable.menu_type,
       menuTable.price,
-      new CustomerId(menuTable.customer_id),
+      menuTable.customer_id,
     );
   }
 }
