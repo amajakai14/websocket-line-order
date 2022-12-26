@@ -1,5 +1,4 @@
 import { tbl_customer } from '@prisma/client';
-import { CustomerEntity } from '../entities/customer.entity';
 import { CustomerId } from './customer-id';
 import { LoginId } from './login-id';
 import { MailAddress } from './mailaddress';
@@ -10,14 +9,6 @@ export class Customer {
   loginId: LoginId;
   mailAddress: MailAddress;
   password: Password;
-
-  async toEntity(): Promise<CustomerEntity> {
-    const customer = new CustomerEntity();
-    customer.login_id = this.loginId.toString();
-    customer.email = this.mailAddress.toString();
-    customer.password = await this.password.hash();
-    return customer;
-  }
 
   isValid(): boolean {
     return this.customerId.isEmpty();

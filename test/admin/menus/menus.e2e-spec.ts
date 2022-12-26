@@ -3,48 +3,43 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as request from 'supertest';
-import { Repository } from 'typeorm';
 import { AppModule } from '../../../src/app.module';
-import { dataSource } from '../../../src/config/typeorm.datasource';
-import { CustomerEntity } from '../../../src/entities/customer.entity';
-import { MenuEntity } from '../../../src/entities/menu.entity';
 import { LoginRequest } from '../../../src/login/login.request';
+import { PrismaService } from '../../../src/prisma/prisma.service';
 import { CustomExceptionFilter } from '../../../src/utils/filter/custom-exception.filter';
 
 describe('menus (e2e)', () => {
   let app: INestApplication;
-  let customerRepository: Repository<CustomerEntity>;
-  let menuRepository: Repository<MenuEntity>;
+  let prismaService: PrismaService;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
+      providers: [PrismaService],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalFilters(new CustomExceptionFilter());
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
+    prismaService = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
-    await dataSource.initialize();
-    customerRepository = await dataSource.getRepository(CustomerEntity);
-    menuRepository = await dataSource.getRepository(MenuEntity);
-    await customerRepository.clear();
-    await menuRepository.clear();
   });
 
   beforeEach(async () => {
-    await customerRepository.clear();
-    await menuRepository.clear();
-
+    await prismaService.tbl_customer.deleteMany({ where: {} });
+    await prismaService.tbl_menu.deleteMany({});
     const testPath = path.dirname(path.dirname(__dirname));
     const sqlTestPath = path.join(testPath, '/testsql/customer2-initial.sql');
+    const sqlMenuPath = path.join(testPath, '/testsql/menu-initial.sql');
     const testSql = fs.readFileSync(sqlTestPath, 'utf8');
-    await dataSource.query(testSql);
+    const menuSql = fs.readFileSync(sqlMenuPath, 'utf8');
+
+    await prismaService.$executeRawUnsafe(testSql);
+    await prismaService.$executeRawUnsafe(menuSql);
   });
 
   afterAll(async () => {
-    await dataSource.destroy();
     await app.close();
   });
 

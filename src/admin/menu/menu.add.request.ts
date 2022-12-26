@@ -1,18 +1,11 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  MaxLength,
-} from 'class-validator';
-import { MenuType } from '../../entities/menu.entity';
+import { IsNotEmpty, IsNumber, IsOptional, MaxLength } from 'class-validator';
 export class MenuAddRequest {
   @IsNotEmpty()
   @MaxLength(100)
   menu_name: string;
 
-  @IsEnum(MenuType)
-  menu_type: MenuType;
+  @IsNotEmpty()
+  menu_type: string;
 
   @IsOptional()
   @IsNumber()

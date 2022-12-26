@@ -8,8 +8,8 @@ export class Password {
     return bcrypt.hash(this.password, this.saltRounds);
   }
 
-  async compareHashed(hashedPassword: string): Promise<boolean> {
-    return await bcrypt.compare(this.password, hashedPassword);
+  async compareHashed(text: string): Promise<boolean> {
+    return await bcrypt.compare(text, this.password);
   }
 
   isEmpty(): boolean {

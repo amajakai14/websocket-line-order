@@ -1,5 +1,4 @@
 import { tbl_menu } from '@prisma/client';
-import { MenuEntity, MenuType } from '../entities/menu.entity';
 import { CustomerId } from './customer-id';
 import { MenuId } from './menu-id';
 
@@ -25,13 +24,7 @@ export class Menu {
   }
 
   static empty() {
-    return new Menu(
-      MenuId.empty(),
-      '',
-      MenuType.INVALID,
-      -1,
-      CustomerId.empty(),
-    );
+    return new Menu(MenuId.empty(), '', 'INVALID', -1, CustomerId.empty());
   }
 
   static of(menuTable: tbl_menu) {
@@ -42,13 +35,5 @@ export class Menu {
       menuTable.price,
       new CustomerId(menuTable.customer_id),
     );
-  }
-
-  toEntity(): MenuEntity {
-    const menuEnity = new MenuEntity();
-    menuEnity.menu_name = this.name;
-    menuEnity.menu_type = this.menuType;
-    menuEnity.price = this.price;
-    return menuEnity;
   }
 }

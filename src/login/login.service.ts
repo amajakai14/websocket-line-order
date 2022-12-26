@@ -1,8 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { sign } from 'jsonwebtoken';
 import { EnvironmentConfig } from '../config/env.config';
-import { CustomerEntity } from '../entities/customer.entity';
-import { Password } from '../model/password';
 import { Result } from '../model/result';
 import { Token } from '../model/token';
 import { CustomerRepository } from '../repositories/customer.repository';
@@ -43,14 +41,5 @@ export class LoginService {
       'ID or Password are incorrect',
     );
     return new LoginResponse(new Token(null), result);
-  }
-
-  async validatePasswordOf(
-    request: LoginRequest,
-    customerEntity: CustomerEntity,
-  ): Promise<boolean> {
-    return await new Password(request.password).compareHashed(
-      customerEntity.password,
-    );
   }
 }
