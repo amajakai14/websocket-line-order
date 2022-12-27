@@ -46,6 +46,12 @@ describe('AppController (e2e)', () => {
     await cleanupDB();
     await mockCustomer.add();
     await mockMenu.add();
+    await prisma.$executeRawUnsafe(
+      "SELECT setval(pg_get_serial_sequence('tbl_menu', 'id'), coalesce(max(id)+1, 1), false) FROM tbl_menu;",
+    );
+    await prisma.$executeRawUnsafe(
+      "SELECT setval(pg_get_serial_sequence('tbl_customer', 'id'), coalesce(max(id)+1, 1), false) FROM tbl_customer;",
+    );
   }
 
   async function cleanupDB(): Promise<void> {
