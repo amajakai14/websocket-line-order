@@ -24,7 +24,7 @@ model tbl_customer {
 model tbl_table {
   id          Int          @id @default(autoincrement())
   table_name  String
-  customer    tbl_customer @relation(fields: [customer_id], references: [id])
+  customer    tbl_customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
   customer_id Int
 }
 
@@ -36,7 +36,7 @@ model tbl_menu {
   available   Boolean      @default(true)
   created_at  DateTime?    @default(now())
   updated_at  DateTime?
-  customer    tbl_customer @relation(fields: [customer_id], references: [id])
+  customer    tbl_customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
   customer_id Int
 }
 
@@ -47,7 +47,7 @@ model tbl_course {
   course_priority  Int?
   created_at       DateTime?    @default(now())
   updated_at       DateTime?
-  customer         tbl_customer @relation(fields: [customer_id], references: [id])
+  customer         tbl_customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
   customer_id      Int
 }
 
@@ -72,6 +72,6 @@ model tbl_order {
   process_type String
   created_at   DateTime?            @default(now())
   updated_at   DateTime?
-  channels     tbl_channel_provider @relation(fields: [channel_id], references: [id])
+  channels     tbl_channel_provider @relation(fields: [channel_id], references: [id], onDelete: Cascade)
   channel_id   String
 }
