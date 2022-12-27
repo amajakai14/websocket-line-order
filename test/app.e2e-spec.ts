@@ -1,6 +1,6 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { tbl_customer } from '@prisma/client';
+import { tbl_customer, tbl_menu } from '@prisma/client';
 import * as request from 'supertest';
 import { CreateCustomerRequest } from '../src/customer/customer.create.request';
 import { LoginRequest } from '../src/login/login.request';
@@ -147,7 +147,7 @@ describe('AppController (e2e)', () => {
     return prisma.tbl_customer.findFirst({ where: { login_id } });
   };
 
-  it('success', async () => {
+  it('/admin/menus (GET) success', async () => {
     const req: LoginRequest = {
       loginId: 'sample_user2',
       password: 'password',
@@ -162,7 +162,7 @@ describe('AppController (e2e)', () => {
     expect(menuList.length).toBe(3);
   });
 
-  it('have not register any menu yet', async () => {
+  it('/admin/menus (GET) have not register any menu yet', async () => {
     const req: LoginRequest = {
       loginId: 'sample_user3',
       password: 'password',
@@ -176,6 +176,66 @@ describe('AppController (e2e)', () => {
     expect(response.statusCode).toBe(200);
     expect(menuList.length).toBe(0);
   });
+
+  it('/admin/menu (POST) success', async () => {
+    const req: LoginRequest = {
+      loginId: 'sample_user4',
+      password: 'password',
+    };
+
+    const token = await login(req);
+
+    const createReq = {
+      menu_name: 'corn soup',
+      menu_type: 'APPETIZER',
+      price: 0,
+    };
+    const response = await request(app.getHttpServer())
+      .post('/admin/menu')
+      .set({ authorization: 'Bearer ' + token })
+      .send(createReq);
+    expect(response.statusCode).toBe(201);
+    const menuData = await getMenuData(4);
+    console.log('created Menu', menuData);
+    expect(menuData.menu_name).toBe(createReq.menu_name);
+    expect(menuData.menu_type).toBe(createReq.menu_type);
+    expect(menuData.price).toBe(0);
+  });
+
+  const getMenuData = async (customer_id: number): Promise<tbl_menu> => {
+    return await prisma.tbl_menu.findFirst({ where: { customer_id } });
+  };
+
+  it('/admin/menu/:id (PUT) success', async () => {
+    const req: LoginRequest = {
+      loginId: 'sample_user2',
+      password: 'password',
+    };
+
+    const token = await login(req);
+
+    const updateReq = {
+      menu_name: 'KRAPAO RICE',
+      menu_type: 'MAIN',
+      price: 50,
+      available: false,
+    };
+    const response = await request(app.getHttpServer())
+      .put('/admin/menu/1')
+      .set({ authorization: 'Bearer ' + token })
+      .send(updateReq);
+    expect(response.statusCode).toBe(201);
+    const menuData = await getMenuDataById(1);
+    console.log('created Menu', menuData);
+    expect(menuData.menu_name).toBe(updateReq.menu_name);
+    expect(menuData.menu_type).toBe(updateReq.menu_type);
+    expect(menuData.price).toBe(50);
+    expect(menuData.available).toBe(false);
+  });
+
+  const getMenuDataById = async (id: number): Promise<tbl_menu> => {
+    return await prisma.tbl_menu.findFirst({ where: { id } });
+  };
 
   async function login(req: LoginRequest): Promise<string> {
     const response = await request(app.getHttpServer())

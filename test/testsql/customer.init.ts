@@ -26,6 +26,12 @@ async function initCustomer() {
       login_id: 'sample_user3',
       password: password,
     },
+    {
+      id: 4,
+      mail_address: 'sample_user4@example.com',
+      login_id: 'sample_user4',
+      password: password,
+    },
   ];
 }
 
