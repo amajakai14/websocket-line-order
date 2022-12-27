@@ -1,37 +1,23 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import * as fs from 'fs';
-import * as path from 'path';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { CreateCustomerRequest } from '../../src/customer/customer.create.request';
 import { CustomExceptionFilter } from '../../src/utils/filter/custom-exception.filter';
-import { PrismaService } from './../../src/prisma/prisma.service';
 
 describe('createCustomer (e2e)', () => {
   let app: INestApplication;
-  let prismaService: PrismaService;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-      providers: [PrismaService],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalFilters(new CustomExceptionFilter());
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
-    prismaService = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
-  });
-
-  beforeEach(async () => {
-    await prismaService.tbl_customer.deleteMany({});
-    const testPath = path.dirname(__dirname);
-    const sqlTestPath = path.join(testPath, '/testsql/customer-initial.sql');
-    const testSql = fs.readFileSync(sqlTestPath, 'utf8');
-    await prismaService.$executeRawUnsafe(testSql);
   });
 
   afterAll(async () => {
@@ -59,32 +45,5 @@ describe('createCustomer (e2e)', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toHaveLength(1);
     expect(response.body.message[0]).toContain('mailAddress');
-  });
-
-  it('fail: cause of registerd login id', async () => {
-    const req: CreateCustomerRequest = {
-      loginId: 'sample_user',
-      password: 'password',
-      mailAddress: 'ironman@example.com',
-    };
-    const response = await request(app.getHttpServer())
-      .post('/customer')
-      .send(req);
-    expect(response.statusCode).toBe(409);
-    expect(response.body.message).toContain('id');
-  });
-
-  it('fail: cause of registerd login id', async () => {
-    const req: CreateCustomerRequest = {
-      loginId: 'ironmaniscoming',
-      password: 'password',
-      mailAddress: 'sample_user@example.com',
-    };
-
-    const response = await request(app.getHttpServer())
-      .post('/customer')
-      .send(req);
-    expect(response.statusCode).toBe(409);
-    expect(response.body.message).toContain('email address');
   });
 });

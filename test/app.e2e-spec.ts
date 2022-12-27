@@ -4,6 +4,7 @@ import { tbl_customer } from '@prisma/client';
 import * as request from 'supertest';
 import { CreateCustomerRequest } from '../src/customer/customer.create.request';
 import { LoginRequest } from '../src/login/login.request';
+import { Menu } from '../src/model/menu';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { CustomExceptionFilter } from '../src/utils/filter/custom-exception.filter';
 import { AppModule } from './../src/app.module';
@@ -109,7 +110,71 @@ describe('AppController (e2e)', () => {
     expect(record.mail_address).toBe('ironman@example.com');
   });
 
+  it('/customer (POST) fail: cause of registerd login id', async () => {
+    const req: CreateCustomerRequest = {
+      loginId: 'sample_user',
+      password: 'password',
+      mailAddress: 'rare_mail@example.com',
+    };
+    const response = await request(app.getHttpServer())
+      .post('/customer')
+      .send(req);
+    expect(response.statusCode).toBe(409);
+    expect(response.body.message).toContain('id');
+  });
+
+  it('/customer (POST) fail: cause of registerd login id', async () => {
+    const req: CreateCustomerRequest = {
+      loginId: 'rare_name',
+      password: 'password',
+      mailAddress: 'sample_user@example.com',
+    };
+
+    const response = await request(app.getHttpServer())
+      .post('/customer')
+      .send(req);
+    expect(response.statusCode).toBe(409);
+    expect(response.body.message).toContain('email address');
+  });
+
   const getCustomerData = async (login_id: string): Promise<tbl_customer> => {
     return prisma.tbl_customer.findFirst({ where: { login_id } });
   };
+
+  it('success', async () => {
+    const req: LoginRequest = {
+      loginId: 'sample_user2',
+      password: 'password',
+    };
+
+    const token = await login(req);
+    const response = await request(app.getHttpServer())
+      .get('/admin/menus')
+      .set({ authorization: 'Bearer ' + token });
+    const menuList: Menu[] = response.body;
+    expect(response.statusCode).toBe(200);
+    expect(menuList.length).toBe(3);
+  });
+
+  it('have not register any menu yet', async () => {
+    const req: LoginRequest = {
+      loginId: 'sample_user3',
+      password: 'password',
+    };
+
+    const token = await login(req);
+    const response = await request(app.getHttpServer())
+      .get('/admin/menus')
+      .set({ authorization: 'Bearer ' + token });
+    const menuList: Menu[] = response.body;
+    expect(response.statusCode).toBe(200);
+    expect(menuList.length).toBe(0);
+  });
+
+  async function login(req: LoginRequest): Promise<string> {
+    const response = await request(app.getHttpServer())
+      .post('/login')
+      .send(req);
+    return response.body.token;
+  }
 });
