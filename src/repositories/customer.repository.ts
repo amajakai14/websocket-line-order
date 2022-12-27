@@ -35,9 +35,9 @@ export class CustomerRepository {
   async register(customer: Customer): Promise<Customer> {
     const result = await this.prisma.tbl_customer.create({
       data: {
-        login_id: customer.loginId.toString(),
+        login_id: customer.loginId,
         password: await customer.hashPassword(),
-        mail_address: customer.mailAddress.toString(),
+        mail_address: customer.mailAddress,
       },
     });
     console.log('result of register', result);
