@@ -1,43 +1,45 @@
 import { tbl_customer } from '@prisma/client';
-import { CustomerId } from './customer-id';
-import { LoginId } from './login-id';
-import { MailAddress } from './mailaddress';
-import { Password } from './password';
+import * as bcrypt from 'bcrypt';
 
 export class Customer {
-  customerId: CustomerId;
-  loginId: LoginId;
-  mailAddress: MailAddress;
-  password: Password;
+  customerId: number;
+  loginId: string;
+  mailAddress: string;
+  password: string;
+
+  private readonly saltRounds = 10;
 
   isValid(): boolean {
-    return this.customerId.isEmpty();
+    return this.customerId != -1;
   }
 
   isEmpty(): boolean {
     return (
-      this.customerId.isEmpty() &&
-      this.loginId.isEmpty() &&
-      this.mailAddress.isEmpty() &&
-      this.password.isEmpty()
+      this.customerId === -1 &&
+      this.loginId === '' &&
+      this.mailAddress === '' &&
+      this.password === ''
     );
   }
 
   static empty() {
-    return new Customer(
-      CustomerId.empty(),
-      new LoginId(''),
-      new MailAddress(''),
-      new Password(''),
-    );
+    return new Customer(-1, '', '', '');
+  }
+
+  async hashPassword(): Promise<string> {
+    return bcrypt.hash(this.password, this.saltRounds);
+  }
+
+  async compareHashed(text: string): Promise<boolean> {
+    return await bcrypt.compare(text, this.password);
   }
 
   static of(customer: tbl_customer): Customer {
     return new Customer(
-      new CustomerId(customer.id),
-      new LoginId(customer.login_id),
-      new MailAddress(customer.mail_address),
-      new Password(customer.password),
+      customer.id,
+      customer.login_id,
+      customer.mail_address,
+      customer.password,
     );
   }
 
@@ -50,14 +52,14 @@ export class Customer {
   }
 
   constructor(
-    customerId: CustomerId,
-    loginId: LoginId,
-    mailAddress: MailAddress,
-    password: Password,
+    customerId: number,
+    loginId: string,
+    mailAddress: string,
+    password: string,
   ) {
     this.customerId = customerId;
-    this.loginId = loginId;
-    this.mailAddress = mailAddress;
+    this.loginId = loginId.toLowerCase();
+    this.mailAddress = mailAddress.toLowerCase();
     this.password = password;
   }
 }

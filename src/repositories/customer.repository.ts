@@ -36,7 +36,7 @@ export class CustomerRepository {
     const result = await this.prisma.tbl_customer.create({
       data: {
         login_id: customer.loginId.toString(),
-        password: await customer.password.hash(),
+        password: await customer.hashPassword(),
         mail_address: customer.mailAddress.toString(),
       },
     });

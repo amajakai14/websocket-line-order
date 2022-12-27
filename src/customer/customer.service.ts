@@ -9,7 +9,7 @@ export class CustomerService {
 
   async create(customer: Customer): Promise<Result> {
     let found = await this.customerRepository.getByLoginId(
-      customer.loginId.toString(),
+      customer.loginId.toLowerCase(),
     );
     if (!found.isEmpty()) {
       return Result.BAD(

@@ -38,47 +38,11 @@ describe('createCustomer (e2e)', () => {
     await app.close();
   });
 
-  it('login success', async () => {
-    const req: LoginRequest = {
-      loginId: 'sample_user2',
-      password: 'password',
-    };
-    const response = await request(app.getHttpServer())
-      .post('/login')
-      .send(req);
-    expect(response.statusCode).toBe(200);
-    expect(response.body.token).toBeDefined();
-  });
-
   it('fail: cause of login id is too short', async () => {
     const req: LoginRequest = {
       loginId: 'Iam',
       password: 'password',
     };
     await request(app.getHttpServer()).post('/login').send(req).expect(400);
-  });
-
-  it('fail: wrong login id', async () => {
-    const req: LoginRequest = {
-      loginId: 'wrong_user',
-      password: 'password',
-    };
-    const response = await request(app.getHttpServer())
-      .post('/login')
-      .send(req);
-    expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe('ID or Password are incorrect');
-  });
-
-  it('fail: wrong password', async () => {
-    const req: LoginRequest = {
-      loginId: 'wrong_user',
-      password: 'password',
-    };
-    const response = await request(app.getHttpServer())
-      .post('/login')
-      .send(req);
-    expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe('ID or Password are incorrect');
   });
 });

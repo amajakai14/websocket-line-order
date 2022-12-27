@@ -1,6 +1,5 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { tbl_customer } from '@prisma/client';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as request from 'supertest';
@@ -37,22 +36,6 @@ describe('createCustomer (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
-  });
-
-  const getCustomerData = async (login_id: string): Promise<tbl_customer> => {
-    return prismaService.tbl_customer.findFirst({ where: { login_id } });
-  };
-
-  it('success', async () => {
-    const req: CreateCustomerRequest = {
-      loginId: 'IamIronman',
-      password: 'password',
-      mailAddress: 'iRonMaN@example.com',
-    };
-    await request(app.getHttpServer()).post('/customer').send(req).expect(201);
-    const record = await getCustomerData('iamironman');
-    expect(record).not.toBeNull();
-    expect(record.mail_address).toBe('ironman@example.com');
   });
 
   it('fail: cause of login id is too short', async () => {

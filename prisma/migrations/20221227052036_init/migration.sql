@@ -86,13 +86,13 @@ CREATE UNIQUE INDEX "tbl_channel_provider_id_key" ON "tbl_channel_provider"("id"
 CREATE UNIQUE INDEX "tbl_channel_provider_customer_id_table_id_key" ON "tbl_channel_provider"("customer_id", "table_id");
 
 -- AddForeignKey
-ALTER TABLE "tbl_table" ADD CONSTRAINT "tbl_table_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "tbl_customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tbl_table" ADD CONSTRAINT "tbl_table_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "tbl_customer"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tbl_menu" ADD CONSTRAINT "tbl_menu_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "tbl_customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tbl_menu" ADD CONSTRAINT "tbl_menu_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "tbl_customer"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tbl_course" ADD CONSTRAINT "tbl_course_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "tbl_customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tbl_course" ADD CONSTRAINT "tbl_course_customer_id_fkey" FOREIGN KEY ("customer_id") REFERENCES "tbl_customer"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tbl_order" ADD CONSTRAINT "tbl_order_channel_id_fkey" FOREIGN KEY ("channel_id") REFERENCES "tbl_channel_provider"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tbl_order" ADD CONSTRAINT "tbl_order_channel_id_fkey" FOREIGN KEY ("channel_id") REFERENCES "tbl_channel_provider"("id") ON DELETE CASCADE ON UPDATE CASCADE;

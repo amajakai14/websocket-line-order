@@ -21,14 +21,14 @@ export class LoginService {
     if (customer.isEmpty()) {
       return this.invalidLoginResponse();
     }
-    const validate = await customer.password.compareHashed(request.password);
+    const validate = await customer.compareHashed(request.password);
     if (!validate) {
       return this.invalidLoginResponse();
     }
 
     const secret = this.environmentConfig.get('JWT_SECRET');
     const token = new Token(
-      sign({ customerId: customer.customerId.value() }, secret, {
+      sign({ customerId: customer.customerId }, secret, {
         expiresIn: 600,
       }),
     );
