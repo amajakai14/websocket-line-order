@@ -1,3 +1,5 @@
+import { tbl_table } from '@prisma/client';
+
 export class Table {
   tableId!: number;
   tableName!: string;
@@ -18,6 +20,15 @@ export class Table {
 
   static empty(): Table {
     return new Table(-1, '', false, -1);
+  }
+
+  static of(table: tbl_table) {
+    return new Table(
+      table.id,
+      table.table_name,
+      table.is_occupied,
+      table.customer_id,
+    );
   }
 
   isEmpty(): boolean {

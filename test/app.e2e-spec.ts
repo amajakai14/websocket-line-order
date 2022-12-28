@@ -265,7 +265,7 @@ describe('AppController (e2e)', () => {
     const unavailable_id = await request(app.getHttpServer())
       .delete('/admin/menus/9999')
       .set({ authorization: 'Bearer ' + token });
-    expect(unavailable_id.statusCode).toBe(404);
+    expect(unavailable_id.statusCode).toBe(500);
   });
 
   const getMenuDataById = async (id: number): Promise<tbl_menu> => {

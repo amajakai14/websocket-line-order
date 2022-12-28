@@ -1,5 +1,5 @@
 import { IsBoolean, IsOptional, MaxLength } from 'class-validator';
-export class CreateTableRequest {
+export class UpdateTableRequest {
   @IsOptional()
   @MaxLength(100)
   table_name: string;

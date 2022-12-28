@@ -57,12 +57,7 @@ export class MenuService {
   }
 
   async deleteMenu(customerId: number, menuId: number): Promise<Result> {
-    const menu: Menu = await this.repository.getMenuOf(menuId, customerId);
-    if (menu.isEmpty()) {
-      return Result.BAD(HttpStatus.NOT_FOUND, 'menu is not found');
-    }
-
-    const success = await this.repository.deleteMenuOf(menuId);
+    const success = await this.repository.deleteMenuOf(menuId, customerId);
     if (!success) {
       return Result.BAD(
         HttpStatus.INTERNAL_SERVER_ERROR,

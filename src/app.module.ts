@@ -10,6 +10,7 @@ import { LoginModule } from './login/login.module';
 import { AuthenticationMiddleware } from './middleware/authentication.middleware';
 import { OrderModule } from './order/order.module';
 import { EventsGateway } from './socket/socket.gateway';
+import { ChannelproviderModule } from './admin/channelprovider/channelprovider.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { EventsGateway } from './socket/socket.gateway';
     MenuModule,
     TablesModule,
     TableModule,
+    ChannelproviderModule,
   ],
   controllers: [AppController],
   providers: [AppService, EventsGateway, EnvironmentConfig],

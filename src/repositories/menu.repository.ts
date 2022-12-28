@@ -32,12 +32,14 @@ export class MenuRepository {
         updated_at: new Date(),
       },
     });
-    return !(result == null);
+    return result != null;
   }
 
-  async deleteMenuOf(id: number): Promise<boolean> {
-    const result = await this.prisma.tbl_menu.delete({ where: { id } });
-    return !(result == null);
+  async deleteMenuOf(id: number, customer_id: number): Promise<boolean> {
+    const result = await this.prisma.tbl_menu.deleteMany({
+      where: { id, customer_id },
+    });
+    return result.count !== 0;
   }
 
   async getMenuListOf(customer_id: number): Promise<Menu[]> {
