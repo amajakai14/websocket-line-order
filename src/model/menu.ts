@@ -25,11 +25,19 @@ export class Menu {
   }
 
   static empty(): Menu {
-    return new Menu(-1, '', 'INVALID', -1, -1);
+    const empty = new Menu(-1, '', 'INVALID', -1, -1);
+    empty.available = false;
+    return empty;
   }
 
   isEmpty(): boolean {
-    return this === Menu.empty();
+    return (
+      this.menuId === -1 &&
+      this.name === '' &&
+      this.menuType === 'INVALID' &&
+      this.price === -1 &&
+      !this.available
+    );
   }
 
   update(req: MenuUpdateRequest) {

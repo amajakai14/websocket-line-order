@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MenuModule } from './admin/menu/menu.module';
-import { MenusModule } from './admin/menus/menus.module';
+import { TableModule } from './admin/table/table.module';
+import { TablesModule } from './admin/tables/tables.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EnvironmentConfig } from './config/env.config';
@@ -11,7 +12,14 @@ import { OrderModule } from './order/order.module';
 import { EventsGateway } from './socket/socket.gateway';
 
 @Module({
-  imports: [CustomerModule, LoginModule, OrderModule, MenuModule, MenusModule],
+  imports: [
+    CustomerModule,
+    LoginModule,
+    OrderModule,
+    MenuModule,
+    TablesModule,
+    TableModule,
+  ],
   controllers: [AppController],
   providers: [AppService, EventsGateway, EnvironmentConfig],
 })

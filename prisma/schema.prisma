@@ -22,8 +22,10 @@ model tbl_customer {
 }
 
 model tbl_table {
-  id          Int          @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   table_name  String
+  is_occupied Boolean
+
   customer    tbl_customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
   customer_id Int
 }

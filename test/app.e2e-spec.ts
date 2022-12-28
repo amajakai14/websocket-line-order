@@ -64,7 +64,7 @@ describe('AppController (e2e)', () => {
     await prisma.tbl_customer.deleteMany();
   }
 
-  xit('/ (GET)', () => {
+  it('/ (GET)', () => {
     request(app.getHttpServer()).get('/').expect(404);
   });
 
@@ -177,7 +177,7 @@ describe('AppController (e2e)', () => {
     expect(menuList.length).toBe(0);
   });
 
-  it('/admin/menu (POST) success', async () => {
+  it('/admin/menus (POST) success', async () => {
     const req: LoginRequest = {
       loginId: 'sample_user4',
       password: 'password',
@@ -191,7 +191,7 @@ describe('AppController (e2e)', () => {
       price: 0,
     };
     const response = await request(app.getHttpServer())
-      .post('/admin/menu')
+      .post('/admin/menus')
       .set({ authorization: 'Bearer ' + token })
       .send(createReq);
     expect(response.statusCode).toBe(201);
@@ -206,7 +206,7 @@ describe('AppController (e2e)', () => {
     return await prisma.tbl_menu.findFirst({ where: { customer_id } });
   };
 
-  it('/admin/menu/:id (PUT) success', async () => {
+  it('/admin/menus/:id (PUT) success', async () => {
     const req: LoginRequest = {
       loginId: 'sample_user2',
       password: 'password',
@@ -221,7 +221,7 @@ describe('AppController (e2e)', () => {
       available: false,
     };
     const response = await request(app.getHttpServer())
-      .put('/admin/menu/1')
+      .put('/admin/menus/1')
       .set({ authorization: 'Bearer ' + token })
       .send(updateReq);
     expect(response.statusCode).toBe(201);
@@ -231,6 +231,41 @@ describe('AppController (e2e)', () => {
     expect(menuData.menu_type).toBe(updateReq.menu_type);
     expect(menuData.price).toBe(50);
     expect(menuData.available).toBe(false);
+  });
+
+  it('/admin/menus/:id (DELETE) success', async () => {
+    const req: LoginRequest = {
+      loginId: 'sample_user2',
+      password: 'password',
+    };
+
+    const token = await login(req);
+
+    const response = await request(app.getHttpServer())
+      .delete('/admin/menus/1')
+      .set({ authorization: 'Bearer ' + token });
+    expect(response.statusCode).toBe(204);
+    const menuData = await getMenuDataById(1);
+    expect(menuData).toBeNull();
+  });
+
+  it('/admin/menus/:id (DELETE) fail', async () => {
+    const req: LoginRequest = {
+      loginId: 'sample_user2',
+      password: 'password',
+    };
+
+    const token = await login(req);
+
+    const response = await request(app.getHttpServer())
+      .delete('/admin/menus/xrc')
+      .set({ authorization: 'Bearer ' + token });
+    expect(response.statusCode).toBe(400);
+
+    const unavailable_id = await request(app.getHttpServer())
+      .delete('/admin/menus/9999')
+      .set({ authorization: 'Bearer ' + token });
+    expect(unavailable_id.statusCode).toBe(404);
   });
 
   const getMenuDataById = async (id: number): Promise<tbl_menu> => {

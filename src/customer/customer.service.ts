@@ -8,9 +8,7 @@ export class CustomerService {
   constructor(private readonly customerRepository: CustomerRepository) {}
 
   async create(customer: Customer): Promise<Result> {
-    let found = await this.customerRepository.getByLoginId(
-      customer.loginId.toLowerCase(),
-    );
+    let found = await this.customerRepository.getByLoginId(customer.loginId);
     if (!found.isEmpty()) {
       return Result.BAD(
         HttpStatus.CONFLICT,

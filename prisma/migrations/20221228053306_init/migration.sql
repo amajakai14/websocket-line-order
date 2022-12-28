@@ -14,6 +14,7 @@ CREATE TABLE "tbl_customer" (
 CREATE TABLE "tbl_table" (
     "id" SERIAL NOT NULL,
     "table_name" TEXT NOT NULL,
+    "is_occupied" BOOLEAN NOT NULL,
     "customer_id" INTEGER NOT NULL,
 
     CONSTRAINT "tbl_table_pkey" PRIMARY KEY ("id")

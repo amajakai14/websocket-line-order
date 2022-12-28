@@ -1,25 +1,25 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MenusController } from '../../../src/admin/menus/menus.controller';
-import { MenusService } from '../../../src/admin/menus/menus.service';
+import { MenuController } from '../../../src/admin/menu/menu.controller';
+import { MenuService } from '../../../src/admin/menu/menu.service';
 import { CustomerRepository } from '../../../src/repositories/customer.repository';
 import { MenuRepository } from '../../../src/repositories/menu.repository';
 import { PrismaService } from './../../../src/prisma/prisma.service';
 
 describe('MenusController', () => {
-  let controller: MenusController;
+  let controller: MenuController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [MenusController],
+      controllers: [MenuController],
       providers: [
-        MenusService,
+        MenuService,
         MenuRepository,
         CustomerRepository,
         PrismaService,
       ],
     }).compile();
 
-    controller = module.get<MenusController>(MenusController);
+    controller = module.get<MenuController>(MenuController);
   });
 
   it('should be defined', () => {

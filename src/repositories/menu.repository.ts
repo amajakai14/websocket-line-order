@@ -35,6 +35,11 @@ export class MenuRepository {
     return !(result == null);
   }
 
+  async deleteMenuOf(id: number): Promise<boolean> {
+    const result = await this.prisma.tbl_menu.delete({ where: { id } });
+    return !(result == null);
+  }
+
   async getMenuListOf(customer_id: number): Promise<Menu[]> {
     const result = await this.prisma.tbl_menu.findMany({
       where: { customer_id },
@@ -47,6 +52,7 @@ export class MenuRepository {
     const result = await this.prisma.tbl_menu.findFirst({
       where: { id, customer_id },
     });
+    console.log('menu to be deleted', result);
     if (result == null) return Menu.empty();
     return Menu.of(result);
   }
