@@ -10,15 +10,16 @@ datasource db {
 }
 
 model tbl_customer {
-  id           Int          @id @default(autoincrement())
-  mail_address String       @unique
-  login_id     String       @unique
-  password     String
-  created_at   DateTime?    @default(now())
-  updated_at   DateTime?
-  menus        tbl_menu[]
-  courses      tbl_course[]
-  tables       tbl_table[]
+  id               Int                  @id @default(autoincrement())
+  mail_address     String               @unique
+  login_id         String               @unique
+  password         String
+  created_at       DateTime?            @default(now())
+  updated_at       DateTime?
+  menus            tbl_menu[]
+  courses          tbl_course[]
+  tables           tbl_table[]
+  courses_on_menus tbl_course_on_menu[]
 }
 
 model tbl_table {
@@ -31,26 +32,39 @@ model tbl_table {
 }
 
 model tbl_menu {
-  id          Int          @id @default(autoincrement())
-  menu_name   String
-  menu_type   String
-  price       Int          @default(0)
-  available   Boolean      @default(true)
-  created_at  DateTime?    @default(now())
-  updated_at  DateTime?
-  customer    tbl_customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  id             Int                  @id @default(autoincrement())
+  menu_name      String
+  menu_type      String
+  price          Int                  @default(0)
+  available      Boolean              @default(true)
+  created_at     DateTime?            @default(now())
+  updated_at     DateTime?
+  customer       tbl_customer         @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  customer_id    Int
+  course_on_menu tbl_course_on_menu[]
+}
+
+model tbl_course_on_menu {
+  course      tbl_course   @relation(fields: [course_id], references: [id])
+  course_id   Int
+  menu        tbl_menu     @relation(fields: [menu_id], references: [id])
+  menu_id     Int
+  customer    tbl_customer @relation(fields: [customer_id], references: [id])
   customer_id Int
+
+  @@id([course_id, menu_id])
 }
 
 model tbl_course {
-  id               Int          @id @default(autoincrement())
+  id               Int                  @id @default(autoincrement())
   course_name      String
-  course_timelimit Int?         @default(90)
+  course_timelimit Int?                 @default(90)
   course_priority  Int?
-  created_at       DateTime?    @default(now())
+  created_at       DateTime?            @default(now())
   updated_at       DateTime?
-  customer         tbl_customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  customer         tbl_customer         @relation(fields: [customer_id], references: [id], onDelete: Cascade)
   customer_id      Int
+  course_on_menu   tbl_course_on_menu[]
 }
 
 model tbl_channel_provider {
