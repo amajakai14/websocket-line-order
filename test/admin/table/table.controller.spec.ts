@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../../prisma/prisma.service';
-import { TableRepository } from '../../repositories/table.repository';
-import { TableController } from './table.controller';
-import { TableService } from './table.service';
+import { TableController } from '../../../src/admin/table/table.controller';
+import { TableService } from '../../../src/admin/table/table.service';
+import { PrismaService } from '../../../src/prisma/prisma.service';
+import { TableRepository } from '../../../src/repositories/table.repository';
 
 describe('TableController', () => {
   let controller: TableController;

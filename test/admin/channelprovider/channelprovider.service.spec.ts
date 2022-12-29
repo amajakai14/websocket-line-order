@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../../prisma/prisma.service';
-import { ChannelproviderService } from './channelprovider.service';
+import { ChannelproviderService } from '../../../src/admin/channelprovider/channelprovider.service';
+import { PrismaService } from '../../../src/prisma/prisma.service';
 
 describe('ChannelproviderService', () => {
   let service: ChannelproviderService;

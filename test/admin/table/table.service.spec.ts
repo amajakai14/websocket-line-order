@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../../prisma/prisma.service';
-import { TableRepository } from '../../repositories/table.repository';
-import { TableService } from './table.service';
+import { TableService } from '../../../src/admin/table/table.service';
+import { PrismaService } from '../../../src/prisma/prisma.service';
+import { TableRepository } from '../../../src/repositories/table.repository';
 
 describe('TableService', () => {
   let service: TableService;

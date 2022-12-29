@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from './../../prisma/prisma.service';
-import { ChannelproviderController } from './channelprovider.controller';
-import { ChannelproviderService } from './channelprovider.service';
+import { ChannelproviderController } from '../../../src/admin/channelprovider/channelprovider.controller';
+import { ChannelproviderService } from '../../../src/admin/channelprovider/channelprovider.service';
+import { PrismaService } from '../../../src/prisma/prisma.service';
 
 describe('ChannelproviderController', () => {
   let controller: ChannelproviderController;
