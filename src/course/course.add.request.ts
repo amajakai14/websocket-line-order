@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, MaxLength } from 'class-validator';
-export class MenuAddRequest {
+export class CourseAddRequest {
   @IsNotEmpty()
   @MaxLength(100)
   menu_name: string;
