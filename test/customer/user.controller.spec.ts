@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaService } from '../../src/prisma/prisma.service';
 import { UserRepository } from '../../src/repositories/user.repository';
 import { UserController } from '../../src/user/user.controller';
 import { UserService } from '../../src/user/user.service';
-import { PrismaService } from './../../src/prisma/prisma.service';
 
-describe('CustomerController', () => {
+describe('UserController', () => {
   let controller: UserController;
 
   beforeEach(async () => {
