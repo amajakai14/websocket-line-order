@@ -6,8 +6,8 @@ export class CourseOnMenuRepository {
   constructor(private prisma: PrismaService) {}
 
   async getCoursesAndMenus(user_id: number) {
-    this.prisma.tbl_course_on_menu.findMany({
-      include: {
+    return await this.prisma.tbl_course_on_menu.findMany({
+      select: {
         course: { select: { id: true, course_name: true } },
         menu: { select: { id: true, menu_name: true, menu_type: true } },
       },

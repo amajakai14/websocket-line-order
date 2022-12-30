@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
+import { CourseOnMenuRepository } from '../../repositories/course.on.menu.repository';
 import { MatchCourseAndMenuController } from './matchcourseandmenu.controller';
-import { MatchcourseandmenuService } from './matchcourseandmenu.service';
+import { MatchCourseAndMenuService } from './matchcourseandmenu.service';
 
 @Module({
   controllers: [MatchCourseAndMenuController],
-  providers: [MatchcourseandmenuService],
+  providers: [MatchCourseAndMenuService, CourseOnMenuRepository, PrismaService],
 })
-export class MatchcourseandmenuModule {}
+export class MatchCourseAndMenuModule {}

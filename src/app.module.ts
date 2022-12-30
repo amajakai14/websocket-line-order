@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ChannelproviderModule } from './admin/channelprovider/channelprovider.module';
+import { MatchCourseAndMenuModule } from './admin/matchcourseandmenu/matchcourseandmenu.module';
 import { MenuModule } from './admin/menu/menu.module';
 import { TableModule } from './admin/table/table.module';
 import { AppController } from './app.controller';
@@ -14,7 +15,6 @@ import { PrismaService } from './prisma/prisma.service';
 import { TasksService } from './scheduler/task.service';
 import { EventsGateway } from './socket/socket.gateway';
 import { CustomerModule } from './user/user.module';
-import { MatchcourseandmenuModule } from './admin/matchcourseandmenu/matchcourseandmenu.module';
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { MatchcourseandmenuModule } from './admin/matchcourseandmenu/matchcourse
     ScheduleModule.forRoot(),
     CourseModule,
     AuthModule,
-    MatchcourseandmenuModule,
+    MatchCourseAndMenuModule,
   ],
   controllers: [AppController],
   providers: [

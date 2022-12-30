@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CourseAddRequest } from '../course/course.add.request';
 import { Course } from '../model/course';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -21,7 +22,7 @@ export class CourseRepository {
     return courses.map((course) => Course.of(course));
   }
 
-  async createCourseOf(user_id: number, req: any) {
+  async createCourseOf(user_id: number, req: CourseAddRequest) {
     return await this.prisma.tbl_course.create({
       data: {
         course_name: req.name,
