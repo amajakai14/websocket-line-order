@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { EnvironmentConfig } from '../../src/config/env.config';
 import { LoginController } from '../../src/login/login.controller';
 import { LoginService } from '../../src/login/login.service';
-import { CustomerRepository } from '../../src/repositories/customer.repository';
+import { UserRepository } from '../../src/repositories/user.repository';
 import { PrismaService } from './../../src/prisma/prisma.service';
 
 describe('LoginController', () => {
@@ -13,7 +13,7 @@ describe('LoginController', () => {
       controllers: [LoginController],
       providers: [
         LoginService,
-        CustomerRepository,
+        UserRepository,
         EnvironmentConfig,
         PrismaService,
       ],

@@ -6,7 +6,7 @@ export class Menu {
   name!: string;
   menuType!: string;
   price!: number;
-  customerId!: number;
+  userId!: number;
   available!: boolean;
 
   constructor(
@@ -14,13 +14,13 @@ export class Menu {
     name: string,
     menuType: string,
     price: number,
-    customerId: number,
+    userId: number,
   ) {
     this.menuId = menuId;
     this.name = name;
     this.menuType = menuType;
     this.price = price;
-    this.customerId = customerId;
+    this.userId = userId;
     this.available = true;
   }
 
@@ -53,7 +53,7 @@ export class Menu {
       menuTable.menu_name,
       menuTable.menu_type,
       menuTable.price,
-      menuTable.customer_id,
+      menuTable.user_id,
     );
   }
 }

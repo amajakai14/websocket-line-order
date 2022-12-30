@@ -1,13 +1,13 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { Customer } from '../model/customer';
 import { Result } from '../model/result';
-import { CustomerRepository } from '../repositories/customer.repository';
+import { User } from '../model/user';
+import { UserRepository } from '../repositories/user.repository';
 
 @Injectable()
-export class CustomerService {
-  constructor(private readonly customerRepository: CustomerRepository) {}
+export class UserService {
+  constructor(private readonly customerRepository: UserRepository) {}
 
-  async create(customer: Customer): Promise<Result> {
+  async create(customer: User): Promise<Result> {
     let found = await this.customerRepository.getByLoginId(customer.loginId);
     if (!found.isEmpty()) {
       return Result.BAD(

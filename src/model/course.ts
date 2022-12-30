@@ -7,7 +7,7 @@ export class Course {
   coursePriority: number;
   createdDate: Date;
   updatedDate: Date;
-  customerId: number;
+  userId: number;
 
   constructor(
     courseId: number,
@@ -16,7 +16,7 @@ export class Course {
     coursePriority: number,
     createdDate: Date,
     updatedDate: Date,
-    customerId: number,
+    userId: number,
   ) {
     this.courseId = courseId;
     this.courseName = courseName;
@@ -24,7 +24,7 @@ export class Course {
     this.coursePriority = coursePriority;
     this.createdDate = createdDate;
     this.updatedDate = updatedDate;
-    this.customerId = customerId;
+    this.userId = userId;
   }
 
   static of(course: tbl_course) {
@@ -35,7 +35,7 @@ export class Course {
       course.course_priority,
       course.created_at,
       course.updated_at,
-      course.customer_id,
+      course.user_id,
     );
   }
 
@@ -45,7 +45,7 @@ export class Course {
       this.courseName === '' &&
       this.courseTimelimit === -1 &&
       this.coursePriority === -1 &&
-      this.customerId === -1
+      this.userId === -1
     );
   }
 

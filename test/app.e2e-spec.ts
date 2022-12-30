@@ -1,6 +1,6 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { tbl_customer, tbl_menu } from '@prisma/client';
+import { tbl_menu } from '@prisma/client';
 import * as request from 'supertest';
 import { CreateCustomerRequest } from '../src/customer/customer.create.request';
 import { LoginRequest } from '../src/login/login.request';
@@ -50,18 +50,17 @@ describe('AppController (e2e)', () => {
       "SELECT setval(pg_get_serial_sequence('tbl_menu', 'id'), coalesce(max(id)+1, 1), false) FROM tbl_menu;",
     );
     await prisma.$executeRawUnsafe(
-      "SELECT setval(pg_get_serial_sequence('tbl_customer', 'id'), coalesce(max(id)+1, 1), false) FROM tbl_customer;",
+      "SELECT setval(pg_get_serial_sequence('tbl_user', 'id'), coalesce(max(id)+1, 1), false) FROM tbl_user;",
     );
   }
 
   async function cleanupDB(): Promise<void> {
     await prisma.tbl_channel_provider.deleteMany();
     await prisma.tbl_course.deleteMany();
-    await prisma.tbl_customer.deleteMany();
+    await prisma.tbl_user.deleteMany();
     await prisma.tbl_order.deleteMany();
     await prisma.tbl_table.deleteMany();
     await prisma.tbl_menu.deleteMany();
-    await prisma.tbl_customer.deleteMany();
   }
 
   it('/ (GET)', () => {
@@ -143,8 +142,8 @@ describe('AppController (e2e)', () => {
     expect(response.body.message).toContain('email address');
   });
 
-  const getCustomerData = async (login_id: string): Promise<tbl_customer> => {
-    return prisma.tbl_customer.findFirst({ where: { login_id } });
+  const getCustomerData = async (login_id: string) => {
+    return prisma.tbl_user.findFirst({ where: { login_id } });
   };
 
   it('/admin/menus (GET) success', async () => {
@@ -202,8 +201,8 @@ describe('AppController (e2e)', () => {
     expect(menuData.price).toBe(0);
   });
 
-  const getMenuData = async (customer_id: number): Promise<tbl_menu> => {
-    return await prisma.tbl_menu.findFirst({ where: { customer_id } });
+  const getMenuData = async (user_id: number): Promise<tbl_menu> => {
+    return await prisma.tbl_menu.findFirst({ where: { user_id } });
   };
 
   it('/admin/menus/:id (PUT) success', async () => {

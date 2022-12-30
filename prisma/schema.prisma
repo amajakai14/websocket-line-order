@@ -9,7 +9,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model tbl_customer {
+model tbl_user {
   id               Int                  @id @default(autoincrement())
   mail_address     String               @unique
   login_id         String               @unique
@@ -27,8 +27,8 @@ model tbl_table {
   table_name  String
   is_occupied Boolean
 
-  customer    tbl_customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
-  customer_id Int
+  user    tbl_user @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id Int
 }
 
 model tbl_menu {
@@ -39,18 +39,18 @@ model tbl_menu {
   available      Boolean              @default(true)
   created_at     DateTime?            @default(now())
   updated_at     DateTime?
-  customer       tbl_customer         @relation(fields: [customer_id], references: [id], onDelete: Cascade)
-  customer_id    Int
+  user           tbl_user             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id        Int
   course_on_menu tbl_course_on_menu[]
 }
 
 model tbl_course_on_menu {
-  course      tbl_course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
-  course_id   Int
-  menu        tbl_menu     @relation(fields: [menu_id], references: [id], onDelete: Cascade)
-  menu_id     Int
-  customer    tbl_customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
-  customer_id Int
+  course    tbl_course @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  course_id Int
+  menu      tbl_menu   @relation(fields: [menu_id], references: [id], onDelete: Cascade)
+  menu_id   Int
+  user      tbl_user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id   Int
 
   @@id([course_id, menu_id])
 }
@@ -62,22 +62,22 @@ model tbl_course {
   course_priority  Int?
   created_at       DateTime?            @default(now())
   updated_at       DateTime?
-  customer         tbl_customer         @relation(fields: [customer_id], references: [id], onDelete: Cascade)
-  customer_id      Int
+  user             tbl_user             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id          Int
   course_on_menu   tbl_course_on_menu[]
 }
 
 model tbl_channel_provider {
-  id          String      @id @unique
-  table_id    Int
-  customer_id Int
-  course_id   Int
-  status      String
-  time_start  DateTime?   @default(now())
-  time_end    DateTime?
-  orders      tbl_order[]
+  id         String      @id @unique
+  table_id   Int
+  user_id    Int
+  course_id  Int
+  status     String
+  time_start DateTime?   @default(now())
+  time_end   DateTime?
+  orders     tbl_order[]
 
-  @@unique([customer_id, table_id])
+  @@unique([user_id, table_id])
 }
 
 model tbl_order {

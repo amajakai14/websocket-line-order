@@ -41,6 +41,6 @@ export class CustomerMockData {
 
   async add() {
     const data = await initCustomer();
-    await this.prisma.tbl_customer.createMany({ data });
+    await this.prisma.tbl_user.createMany({ data });
   }
 }

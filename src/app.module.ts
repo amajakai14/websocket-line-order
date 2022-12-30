@@ -14,6 +14,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { TasksService } from './scheduler/task.service';
 import { EventsGateway } from './socket/socket.gateway';
 import { CourseModule } from './course/course.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { CourseModule } from './course/course.module';
     ChannelproviderModule,
     ScheduleModule.forRoot(),
     CourseModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [

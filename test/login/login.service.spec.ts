@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EnvironmentConfig } from '../../src/config/env.config';
 import { LoginService } from '../../src/login/login.service';
-import { CustomerRepository } from '../../src/repositories/customer.repository';
+import { UserRepository } from '../../src/repositories/user.repository';
 import { PrismaService } from './../../src/prisma/prisma.service';
 
 describe('LoginService', () => {
@@ -11,7 +11,7 @@ describe('LoginService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         LoginService,
-        CustomerRepository,
+        UserRepository,
         EnvironmentConfig,
         PrismaService,
       ],

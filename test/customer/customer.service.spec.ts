@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CustomerService } from '../../src/customer/customer.service';
-import { CustomerRepository } from '../../src/repositories/customer.repository';
+import { UserService } from '../../src/customer/customer.service';
+import { UserRepository } from '../../src/repositories/user.repository';
 import { PrismaService } from './../../src/prisma/prisma.service';
 
 describe('CustomerService', () => {
-  let service: CustomerService;
+  let service: UserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [CustomerService, CustomerRepository, PrismaService],
+      providers: [UserService, UserRepository, PrismaService],
     }).compile();
 
-    service = module.get<CustomerService>(CustomerService);
+    service = module.get<UserService>(UserService);
   });
 
   it('should be defined', () => {

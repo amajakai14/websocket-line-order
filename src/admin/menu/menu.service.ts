@@ -1,8 +1,8 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Menu } from '../../model/menu';
 import { Result } from '../../model/result';
-import { CustomerRepository } from '../../repositories/customer.repository';
 import { MenuRepository } from '../../repositories/menu.repository';
+import { UserRepository } from '../../repositories/user.repository';
 import { MenusResponse } from './menu.response';
 import { MenuUpdateRequest } from './menu.update.request';
 
@@ -10,11 +10,11 @@ import { MenuUpdateRequest } from './menu.update.request';
 export class MenuService {
   constructor(
     private repository: MenuRepository,
-    private customerRespository: CustomerRepository,
+    private customerRespository: UserRepository,
   ) {}
 
   async menusOf(customerId: number): Promise<MenusResponse> {
-    const user = await this.customerRespository.getByCustomerId(customerId);
+    const user = await this.customerRespository.getByUserId(customerId);
     if (user.isEmpty()) {
       return new MenusResponse(
         [Menu.empty()],
@@ -26,7 +26,7 @@ export class MenuService {
   }
 
   async createMenu(customerId: number, menu: Menu): Promise<Result> {
-    const customer = await this.customerRespository.getByCustomerId(customerId);
+    const customer = await this.customerRespository.getByUserId(customerId);
 
     if (!customer.isValid()) {
       return Result.BAD(HttpStatus.NOT_FOUND, 'customer is not found');

@@ -1,16 +1,16 @@
 import { Body, Controller, HttpException, Post } from '@nestjs/common';
-import { Customer } from '../model/customer';
 import { Result } from '../model/result';
+import { User } from '../model/user';
 import { CreateCustomerRequest } from './customer.create.request';
-import { CustomerService } from './customer.service';
+import { UserService } from './customer.service';
 
 @Controller('customer')
 export class CustomerController {
-  constructor(readonly customerService: CustomerService) {}
+  constructor(readonly customerService: UserService) {}
 
   @Post()
   async createCustomer(@Body() request: CreateCustomerRequest) {
-    const customer = new Customer(
+    const customer = new User(
       -1,
       request.loginId,
       request.mailAddress,

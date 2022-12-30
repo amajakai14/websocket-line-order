@@ -13,8 +13,8 @@ export class MenuRepository {
         menu_type: menu.menuType,
         price: menu.price,
         available: menu.available,
-        customer: {
-          connect: { id: menu.customerId },
+        user: {
+          connect: { id: menu.userId },
         },
       },
     });
@@ -35,26 +35,25 @@ export class MenuRepository {
     return result != null;
   }
 
-  async deleteMenuOf(id: number, customer_id: number): Promise<boolean> {
+  async deleteMenuOf(id: number, user_id: number): Promise<boolean> {
     const result = await this.prisma.tbl_menu.deleteMany({
-      where: { id, customer_id },
+      where: { id, user_id },
     });
     return result.count !== 0;
   }
 
-  async getMenuListOf(customer_id: number): Promise<Menu[]> {
+  async getMenuListOf(user_id: number): Promise<Menu[]> {
     const result = await this.prisma.tbl_menu.findMany({
-      where: { customer_id },
+      where: { user_id },
     });
     if (result == null) return [Menu.empty()];
     return result.map((menuTable) => Menu.of(menuTable));
   }
 
-  async getMenuOf(id: number, customer_id: number): Promise<Menu> {
+  async getMenuOf(id: number, user_id: number): Promise<Menu> {
     const result = await this.prisma.tbl_menu.findFirst({
-      where: { id, customer_id },
+      where: { id, user_id },
     });
-    console.log('menu to be deleted', result);
     if (result == null) return Menu.empty();
     return Menu.of(result);
   }

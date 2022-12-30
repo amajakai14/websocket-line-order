@@ -8,7 +8,7 @@ const data = [
     menu_type: 'MAIN',
     price: 0,
     available: true,
-    customer_id: 2,
+    user_id: 2,
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ const data = [
     menu_type: 'MAIN',
     price: 0,
     available: true,
-    customer_id: 2,
+    user_id: 2,
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const data = [
     menu_type: 'DESSERT',
     price: 0,
     available: true,
-    customer_id: 2,
+    user_id: 2,
   },
 ];
 

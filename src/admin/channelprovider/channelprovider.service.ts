@@ -5,7 +5,7 @@ import { ChannelProviderRepository } from '../../repositories/channelprovider.re
 import { CreateChannelRequest } from './channelprovider.add.request';
 
 @Injectable()
-export class ChannelproviderService {
+export class ChannelProviderService {
   constructor(private readonly repository: ChannelProviderRepository) {}
   async createChannelProvider(
     customerId: number,

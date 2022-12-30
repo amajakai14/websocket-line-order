@@ -9,14 +9,14 @@ export class ChannelProviderRepository {
 
   async createChannel(
     id: string,
-    customer_id: number,
+    user_id: number,
     req: CreateChannelRequest,
   ): Promise<boolean> {
     const result = this.prisma.tbl_channel_provider.create({
       data: {
         id,
         table_id: req.table_id,
-        customer_id,
+        user_id,
         course_id: req.course_id,
         status: 'ACTIVE',
       },
@@ -24,12 +24,9 @@ export class ChannelProviderRepository {
     return result != null;
   }
 
-  async getActiveChannel(
-    table_id: number,
-    customer_id: number,
-  ): Promise<boolean> {
+  async getActiveChannel(table_id: number, user_id: number): Promise<boolean> {
     const result = await this.prisma.tbl_channel_provider.findFirst({
-      where: { table_id, customer_id, status: 'ACTIVE' },
+      where: { table_id, user_id, status: 'ACTIVE' },
     });
     return result != null;
   }
@@ -52,17 +49,17 @@ export class ChannelProviderRepository {
     return ChannelProvider.of(channel);
   }
 
-  async getChannelsOf(customer_id: number): Promise<ChannelProvider[]> {
+  async getChannelsOf(user_id: number): Promise<ChannelProvider[]> {
     const channels = await this.prisma.tbl_channel_provider.findMany({
-      where: { customer_id },
+      where: { user_id },
     });
     if (channels.length === 0) return [ChannelProvider.empty()];
     return channels.map((channel) => ChannelProvider.of(channel));
   }
 
-  async deleteTableOf(id: number, customer_id: number): Promise<boolean> {
+  async deleteTableOf(id: number, user_id: number): Promise<boolean> {
     const result = await this.prisma.tbl_table.deleteMany({
-      where: { id, customer_id },
+      where: { id, user_id },
     });
     return result.count != 0;
   }

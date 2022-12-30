@@ -27,7 +27,7 @@ export class Table {
       table.id,
       table.table_name,
       table.is_occupied,
-      table.customer_id,
+      table.user_id,
     );
   }
 

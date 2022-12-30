@@ -1,19 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ChannelproviderController } from '../../../src/admin/channelprovider/channelprovider.controller';
-import { ChannelproviderService } from '../../../src/admin/channelprovider/channelprovider.service';
+import { ChannelProviderController } from '../../../src/admin/channelprovider/channelprovider.controller';
+import { ChannelProviderService } from '../../../src/admin/channelprovider/channelprovider.service';
 import { PrismaService } from '../../../src/prisma/prisma.service';
+import { ChannelProviderRepository } from '../../../src/repositories/channelprovider.repository';
 
 describe('ChannelproviderController', () => {
-  let controller: ChannelproviderController;
+  let controller: ChannelProviderController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [ChannelproviderController],
-      providers: [ChannelproviderService, PrismaService],
+      controllers: [ChannelProviderController],
+      providers: [
+        ChannelProviderService,
+        ChannelProviderRepository,
+        PrismaService,
+      ],
     }).compile();
 
-    controller = module.get<ChannelproviderController>(
-      ChannelproviderController,
+    controller = module.get<ChannelProviderController>(
+      ChannelProviderController,
     );
   });
 

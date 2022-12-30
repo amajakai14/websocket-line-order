@@ -1,5 +1,12 @@
-import { Controller, Delete, HttpException, Post, Put } from '@nestjs/common';
-import { Body, Get, Req } from '@nestjs/common/decorators';
+import {
+  Controller,
+  Delete,
+  HttpException,
+  HttpStatus,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { Body, Get, Param, Req } from '@nestjs/common/decorators';
 import { CustomerId } from '../model/customer-id';
 import { Result } from './../model/result';
 import { CourseAddRequest } from './course.add.request';
@@ -27,14 +34,30 @@ export class CourseController {
   }
 
   @Put(':id')
-  async updateCourse() {
-    this.service.updateCourse();
-    return;
+  async updateCourse(
+    @Req() req,
+    @Param() id: string,
+    @Body() courseUpdateRequest: CourseAddRequest,
+  ) {
+    const decoded: CustomerId = req.app.locals.decoded;
+    const course_id = parseInt(id);
+    if (isNaN(course_id)) {
+      throw new HttpException('invalid value', HttpStatus.BAD_REQUEST);
+    }
+    return this.service.updateCourse(
+      decoded.customerId,
+      course_id,
+      courseUpdateRequest,
+    );
   }
 
   @Delete(':id')
-  async deleteCourse() {
-    this.service.deleteCourse();
-    return;
+  async deleteCourse(@Req() req, @Param() id: string) {
+    const decoded: CustomerId = req.app.locals.decoded;
+    const course_id = parseInt(id);
+    if (isNaN(course_id)) {
+      throw new HttpException('invalid value', HttpStatus.BAD_REQUEST);
+    }
+    return this.service.deleteCourse(course_id, decoded.customerId);
   }
 }

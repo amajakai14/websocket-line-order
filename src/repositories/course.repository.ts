@@ -6,40 +6,39 @@ import { PrismaService } from '../prisma/prisma.service';
 export class CourseRepository {
   constructor(private prisma: PrismaService) {}
 
-  async getCourseOf(id: number, customer_id: number): Promise<boolean> {
+  async getCourseOf(id: number, user_id: number): Promise<boolean> {
     const result = await this.prisma.tbl_course.findFirst({
-      where: { id, customer_id },
+      where: { id, user_id },
     });
     return result != null;
   }
 
-  async getCoursesOf(customer_id: number): Promise<Course[]> {
+  async getCoursesOf(user_id: number): Promise<Course[]> {
     const courses = await this.prisma.tbl_course.findMany({
-      where: { customer_id },
+      where: { user_id },
     });
     if (courses.length === 0) return [Course.empty()];
     return courses.map((course) => Course.of(course));
   }
 
-  async createCourseOf(customer_id: number, req: any): Promise<boolean> {
-    const result = await this.prisma.tbl_course.create({
+  async createCourseOf(user_id: number, req: any) {
+    return await this.prisma.tbl_course.create({
       data: {
         course_name: req.name,
         course_priority: req.course_priority,
         course_timelimit: req.timelimit,
-        customer: { connect: { id: customer_id } },
+        user: { connect: { id: user_id } },
       },
     });
-    return result != null;
   }
 
   async updateCourseOf(
     id: number,
-    customer_id: number,
+    user_id: number,
     req: any,
   ): Promise<boolean> {
     await this.prisma.tbl_course.updateMany({
-      where: { id, customer_id },
+      where: { id, user_id },
       data: {
         course_name: req.course_name,
         course_priority: req.course_priority,
@@ -50,9 +49,9 @@ export class CourseRepository {
     return;
   }
 
-  async deleteCourseOf(id: number, customer_id: number): Promise<boolean> {
+  async deleteCourseOf(id: number, user_id: number): Promise<boolean> {
     const result = await this.prisma.tbl_table.deleteMany({
-      where: { id, customer_id },
+      where: { id, user_id },
     });
     return result.count != 0;
   }

@@ -3,7 +3,7 @@ import { tbl_channel_provider } from '@prisma/client';
 export class ChannelProvider {
   channelProviderId: string;
   tableId: number;
-  customerId: number;
+  userId: number;
   courseId: number;
   status: string;
   timeStart: Date;
@@ -11,7 +11,7 @@ export class ChannelProvider {
   constructor(
     channelProviderId: string,
     tableId: number,
-    customerId: number,
+    userId: number,
     courseId: number,
     status: string,
     timeStart: Date,
@@ -19,7 +19,7 @@ export class ChannelProvider {
   ) {
     this.channelProviderId = channelProviderId;
     this.tableId = tableId;
-    this.customerId = customerId;
+    this.userId = userId;
     this.courseId = courseId;
     this.status = status;
     this.timeStart = timeStart;
@@ -30,7 +30,7 @@ export class ChannelProvider {
     return (
       this.channelProviderId === '' &&
       this.courseId == -1 &&
-      this.customerId == -1 &&
+      this.userId == -1 &&
       this.status == '' &&
       this.timeStart == null
     );
@@ -40,7 +40,7 @@ export class ChannelProvider {
     return new ChannelProvider(
       channel.id,
       channel.table_id,
-      channel.customer_id,
+      channel.user_id,
       channel.course_id,
       channel.status,
       channel.time_start,

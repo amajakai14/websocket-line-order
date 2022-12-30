@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MenuController } from '../../../src/admin/menu/menu.controller';
 import { MenuService } from '../../../src/admin/menu/menu.service';
-import { CustomerRepository } from '../../../src/repositories/customer.repository';
 import { MenuRepository } from '../../../src/repositories/menu.repository';
+import { UserRepository } from '../../../src/repositories/user.repository';
 import { PrismaService } from './../../../src/prisma/prisma.service';
 
 describe('MenusController', () => {
@@ -11,12 +11,7 @@ describe('MenusController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MenuController],
-      providers: [
-        MenuService,
-        MenuRepository,
-        CustomerRepository,
-        PrismaService,
-      ],
+      providers: [MenuService, MenuRepository, UserRepository, PrismaService],
     }).compile();
 
     controller = module.get<MenuController>(MenuController);

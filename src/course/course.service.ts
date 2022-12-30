@@ -17,15 +17,18 @@ export class CourseService {
   }
 
   async createCourse(customerId: number, req: CourseAddRequest) {
-    const success = await this.repository.createCourseOf(customerId, req);
-    return;
+    return await this.repository.createCourseOf(customerId, req);
   }
 
-  async updateCourse() {
-    return;
+  async updateCourse(
+    customerId: number,
+    courseId: number,
+    req: CourseAddRequest,
+  ) {
+    return await this.repository.updateCourseOf(courseId, customerId, req);
   }
 
-  async deleteCourse() {
-    return;
+  async deleteCourse(courseId: number, customerId: number) {
+    return await this.repository.deleteCourseOf(courseId, customerId);
   }
 }

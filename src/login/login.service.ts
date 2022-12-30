@@ -3,14 +3,14 @@ import { sign } from 'jsonwebtoken';
 import { EnvironmentConfig } from '../config/env.config';
 import { Result } from '../model/result';
 import { Token } from '../model/token';
-import { CustomerRepository } from '../repositories/customer.repository';
+import { UserRepository } from '../repositories/user.repository';
 import { LoginRequest } from './login.request';
 import { LoginResponse } from './login.response';
 
 @Injectable()
 export class LoginService {
   constructor(
-    private customersRepository: CustomerRepository,
+    private customersRepository: UserRepository,
     private environmentConfig: EnvironmentConfig,
   ) {}
 
@@ -28,7 +28,7 @@ export class LoginService {
 
     const secret = this.environmentConfig.get('JWT_SECRET');
     const token = new Token(
-      sign({ customerId: customer.customerId }, secret, {
+      sign({ customerId: customer.userId }, secret, {
         expiresIn: 600,
       }),
     );
