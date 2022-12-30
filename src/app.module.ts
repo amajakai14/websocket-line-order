@@ -5,21 +5,19 @@ import { MenuModule } from './admin/menu/menu.module';
 import { TableModule } from './admin/table/table.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { EnvironmentConfig } from './config/env.config';
+import { CourseModule } from './course/course.module';
 import { CustomerModule } from './customer/customer.module';
-import { LoginModule } from './login/login.module';
 import { AuthenticationMiddleware } from './middleware/authentication.middleware';
 import { OrderModule } from './order/order.module';
 import { PrismaService } from './prisma/prisma.service';
 import { TasksService } from './scheduler/task.service';
 import { EventsGateway } from './socket/socket.gateway';
-import { CourseModule } from './course/course.module';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     CustomerModule,
-    LoginModule,
     OrderModule,
     MenuModule,
     TableModule,
