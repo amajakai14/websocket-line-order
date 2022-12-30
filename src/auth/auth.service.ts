@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginRequest } from '../login/login.request';
 import { User } from '../model/user';
 import { UserRepository } from '../repositories/user.repository';
-import { JwtPayload, UserWithoutPassword } from './jwt/jwt.payload';
+import { UserWithoutPassword } from './jwt/jwt.payload';
 
 @Injectable()
 export class AuthService {
@@ -27,17 +27,14 @@ export class AuthService {
 
   userPayload(user: User): UserWithoutPassword {
     const { password, ...props } = user;
-    console.log('transform user', props);
     return props;
   }
 
-  async verifyPayload(payload: JwtPayload) {
-    console.log('verify payload at auth service', payload);
+  async verifyPayload(payload: any) {
     const user = await this.userRepository.getByUserId(payload.userId);
     if (user == null) {
       throw new UnauthorizedException('no such a user from this payload');
     }
-    console.log('user in auth service', user);
     return this.userPayload(user);
   }
 

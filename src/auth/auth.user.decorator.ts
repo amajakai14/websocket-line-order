@@ -1,12 +1,19 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { Request } from 'express';
-import { UserWithoutPassword } from './jwt/jwt.payload';
+import { JWTPayloadUser, UserWithoutPassword } from './jwt/jwt.payload';
 
 export const AuthUser = createParamDecorator(
-  (data: keyof UserWithoutPassword, ctx: ExecutionContext) => {
+  (data: keyof JWTPayloadUser, ctx: ExecutionContext) => {
     const user = ctx.switchToHttp().getRequest<Request>()
-      .user as UserWithoutPassword;
+      .user as JWTPayloadUser;
 
-    return data ? user && user[data] : user;
+    console.log('auth user', user);
+    const userDetail: UserWithoutPassword = {
+      userId: user.userId,
+      loginId: user.loginId,
+      mailAddress: user.mailAddress,
+    };
+
+    return data ? userDetail && userDetail[data] : userDetail;
   },
 );

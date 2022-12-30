@@ -5,12 +5,12 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { LoginRequest } from '../login/login.request';
 import { JwtAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
+import { AuthUser } from './auth.user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -27,7 +27,7 @@ export class AuthController {
   @Get('me')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
-  async getInfo(@Req() user: any) {
+  async getInfo(@AuthUser() user: any) {
     console.log(user);
     return user;
   }
