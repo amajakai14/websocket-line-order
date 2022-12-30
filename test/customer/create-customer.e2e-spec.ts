@@ -2,7 +2,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import { CreateCustomerRequest } from '../../src/customer/customer.create.request';
+import { CreateUserRequest } from '../../src/user/user.create.request';
 import { CustomExceptionFilter } from '../../src/utils/filter/custom-exception.filter';
 
 describe('createCustomer (e2e)', () => {
@@ -25,23 +25,21 @@ describe('createCustomer (e2e)', () => {
   });
 
   it('fail: cause of login id is too short', async () => {
-    const req: CreateCustomerRequest = {
+    const req: CreateUserRequest = {
       loginId: 'Iam',
       password: 'password',
       mailAddress: 'ironman@example.com',
     };
-    await request(app.getHttpServer()).post('/customer').send(req).expect(400);
+    await request(app.getHttpServer()).post('/user').send(req).expect(400);
   });
 
   it('fail: is not an email', async () => {
-    const req: CreateCustomerRequest = {
+    const req: CreateUserRequest = {
       loginId: 'Iamironman',
       password: 'password',
       mailAddress: 'ironmaxample.com',
     };
-    const response = await request(app.getHttpServer())
-      .post('/customer')
-      .send(req);
+    const response = await request(app.getHttpServer()).post('/user').send(req);
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toHaveLength(1);
     expect(response.body.message[0]).toContain('mailAddress');

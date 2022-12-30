@@ -2,10 +2,10 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { tbl_menu } from '@prisma/client';
 import * as request from 'supertest';
-import { CreateCustomerRequest } from '../src/customer/customer.create.request';
 import { LoginRequest } from '../src/login/login.request';
 import { Menu } from '../src/model/menu';
 import { PrismaService } from '../src/prisma/prisma.service';
+import { CreateUserRequest } from '../src/user/user.create.request';
 import { CustomExceptionFilter } from '../src/utils/filter/custom-exception.filter';
 import { AppModule } from './../src/app.module';
 import { CustomerMockData } from './testsql/customer.init';
@@ -103,46 +103,42 @@ describe('AppController (e2e)', () => {
     expect(response.body.message).toBe('no such a user');
   });
 
-  it('/customer (POST) success', async () => {
-    const req: CreateCustomerRequest = {
+  it('/user (POST) success', async () => {
+    const req: CreateUserRequest = {
       loginId: 'IamIronman',
       password: 'password',
       mailAddress: 'iRonMaN@example.com',
     };
-    await request(app.getHttpServer()).post('/customer').send(req).expect(201);
-    const record = await getCustomerData('iamironman');
+    await request(app.getHttpServer()).post('/user').send(req).expect(201);
+    const record = await getUserData('iamironman');
     expect(record).not.toBeNull();
     expect(record.mail_address).toBe('ironman@example.com');
   });
 
-  it('/customer (POST) fail: cause of registerd login id', async () => {
-    const req: CreateCustomerRequest = {
+  it('/user (POST) fail: cause of registerd login id', async () => {
+    const req: CreateUserRequest = {
       loginId: 'sample_user',
       password: 'password',
       mailAddress: 'rare_mail@example.com',
     };
-    const response = await request(app.getHttpServer())
-      .post('/customer')
-      .send(req);
+    const response = await request(app.getHttpServer()).post('/user').send(req);
     expect(response.statusCode).toBe(409);
     expect(response.body.message).toContain('id');
   });
 
-  it('/customer (POST) fail: cause of registerd login id', async () => {
-    const req: CreateCustomerRequest = {
+  it('/user (POST) fail: cause of registerd login id', async () => {
+    const req: CreateUserRequest = {
       loginId: 'rare_name',
       password: 'password',
       mailAddress: 'sample_user@example.com',
     };
 
-    const response = await request(app.getHttpServer())
-      .post('/customer')
-      .send(req);
+    const response = await request(app.getHttpServer()).post('/user').send(req);
     expect(response.statusCode).toBe(409);
     expect(response.body.message).toContain('email address');
   });
 
-  const getCustomerData = async (login_id: string) => {
+  const getUserData = async (login_id: string) => {
     return prisma.tbl_user.findFirst({ where: { login_id } });
   };
 

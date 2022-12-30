@@ -8,12 +8,12 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { EnvironmentConfig } from './config/env.config';
 import { CourseModule } from './course/course.module';
-import { CustomerModule } from './customer/customer.module';
 import { AuthenticationMiddleware } from './middleware/authentication.middleware';
 import { OrderModule } from './order/order.module';
 import { PrismaService } from './prisma/prisma.service';
 import { TasksService } from './scheduler/task.service';
 import { EventsGateway } from './socket/socket.gateway';
+import { CustomerModule } from './user/user.module';
 
 @Module({
   imports: [

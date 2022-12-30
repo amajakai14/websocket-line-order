@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
-export class CreateCustomerRequest {
+export class CreateUserRequest {
   @IsNotEmpty()
   @MinLength(8)
   @MaxLength(50)

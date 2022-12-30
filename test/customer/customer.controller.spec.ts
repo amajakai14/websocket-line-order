@@ -1,19 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CustomerController } from '../../src/customer/customer.controller';
-import { UserService } from '../../src/customer/customer.service';
 import { UserRepository } from '../../src/repositories/user.repository';
+import { UserController } from '../../src/user/user.controller';
+import { UserService } from '../../src/user/user.service';
 import { PrismaService } from './../../src/prisma/prisma.service';
 
 describe('CustomerController', () => {
-  let controller: CustomerController;
+  let controller: UserController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [CustomerController],
+      controllers: [UserController],
       providers: [UserService, UserRepository, PrismaService],
     }).compile();
 
-    controller = module.get<CustomerController>(CustomerController);
+    controller = module.get<UserController>(UserController);
   });
 
   it('should be defined', () => {
