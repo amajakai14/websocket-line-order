@@ -79,28 +79,28 @@ describe('AppController (e2e)', () => {
     expect(response.body.token).toBeDefined();
   });
 
-  it('/login (POST) fail: wrong login id', async () => {
+  it('auth/login (POST) fail: wrong login id', async () => {
     const req: LoginRequest = {
       loginId: 'wrong_user',
       password: 'password',
     };
     const response = await request(app.getHttpServer())
-      .post('/login')
+      .post('/auth/login')
       .send(req);
-    expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe('ID or Password are incorrect');
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toBe('no such a user');
   });
 
-  it('/login (POST) fail: wrong password', async () => {
+  it('auth/login (POST) fail: wrong password', async () => {
     const req: LoginRequest = {
       loginId: 'sample_user2',
       password: 'passwordXD',
     };
     const response = await request(app.getHttpServer())
-      .post('/login')
+      .post('/auth/login')
       .send(req);
-    expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe('ID or Password are incorrect');
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toBe('no such a user');
   });
 
   it('/customer (POST) success', async () => {

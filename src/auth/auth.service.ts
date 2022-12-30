@@ -18,7 +18,7 @@ export class AuthService {
       throw new UnauthorizedException('no such a user');
     }
 
-    const validatePassword = user.compareHashed(req.password);
+    const validatePassword = await user.compareHashed(req.password);
     if (!validatePassword) {
       throw new UnauthorizedException('no such a user');
     }
