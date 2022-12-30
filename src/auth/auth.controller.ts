@@ -8,6 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { LoginRequest } from '../login/login.request';
+import { Token } from '../model/token';
 import { JwtAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { AuthUser } from './auth.user.decorator';
@@ -18,10 +19,10 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  // @UseInterceptors(TokenInterceptor)
-  async login(@Body() req: LoginRequest): Promise<string> {
+  async login(@Body() req: LoginRequest): Promise<Token> {
     const user = await this.service.login(req);
-    return this.service.signToken(user);
+    const token = this.service.signToken(user);
+    return new Token(token);
   }
 
   @Get('me')

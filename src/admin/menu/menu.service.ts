@@ -32,7 +32,13 @@ export class MenuService {
       return Result.BAD(HttpStatus.NOT_FOUND, 'customer is not found');
     }
 
-    await this.repository.createMenuOf(menu);
+    const success = await this.repository.createMenuOf(menu);
+    return success
+      ? Result.OK()
+      : Result.BAD(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          'unable to register a menu',
+        );
   }
 
   async updateMenu(

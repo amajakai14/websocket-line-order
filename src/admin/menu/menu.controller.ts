@@ -9,9 +9,11 @@ import {
   Param,
   Post,
   Put,
-  Req,
+  UseGuards,
 } from '@nestjs/common';
-import { CustomerId } from '../../model/customer-id';
+import { JwtAuthGuard } from '../../auth/auth.guard';
+import { AuthUser } from '../../auth/auth.user.decorator';
+import { UserWithoutPassword } from '../../auth/jwt/jwt.payload';
 import { Menu } from '../../model/menu';
 import { MenuAddRequest } from './menu.add.request';
 import { MenuService } from './menu.service';
@@ -22,9 +24,9 @@ export class MenuController {
   constructor(private readonly service: MenuService) {}
 
   @Get()
-  async menus(@Req() req): Promise<Menu[]> {
-    const decoded: CustomerId = req.app.locals.decoded;
-    const result = await this.service.menusOf(decoded.customerId);
+  @UseGuards(JwtAuthGuard)
+  async menus(@AuthUser() user: UserWithoutPassword): Promise<Menu[]> {
+    const result = await this.service.menusOf(user.userId);
     if (result.result.isBad()) {
       throw new HttpException(
         result.result.errorMessage,
@@ -35,42 +37,41 @@ export class MenuController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async createMenu(
-    @Req() req,
+    @AuthUser() user: UserWithoutPassword,
     @Body() menuAddRequest: MenuAddRequest,
   ): Promise<void> {
-    const decoded: CustomerId = req.app.locals.decoded;
-    await this.service.createMenu(
-      decoded.customerId,
-      this.toMenu(menuAddRequest, decoded),
+    console.log('user ', user);
+    const result = await this.service.createMenu(
+      user.userId,
+      this.toMenu(menuAddRequest, user.userId),
     );
+
+    if (result.isBad()) {
+      throw new HttpException(result.errorMessage, result.httpStatus);
+    }
   }
 
-  toMenu(req: MenuAddRequest, customerId: CustomerId): Menu {
+  toMenu(req: MenuAddRequest, userId: number): Menu {
     const price = req.price == null ? 0 : req.price;
-    return new Menu(
-      -1,
-      req.menu_name,
-      req.menu_type,
-      price,
-      customerId.customerId,
-    );
+    return new Menu(-1, req.menu_name, req.menu_type, price, userId);
   }
 
   @Put(':id')
   @HttpCode(201)
+  @UseGuards(JwtAuthGuard)
   async updateMenu(
-    @Req() req,
+    @AuthUser() user: UserWithoutPassword,
     @Param('id') id: string,
     @Body() requestBody: MenuUpdateRequest,
   ): Promise<void> {
-    const decoded: CustomerId = req.app.locals.decoded;
     const menu_id = parseInt(id);
     if (isNaN(menu_id)) {
       throw new HttpException('invalid value', HttpStatus.BAD_REQUEST);
     }
     const result = await this.service.updateMenu(
-      decoded.customerId,
+      user.userId,
       parseInt(id),
       requestBody,
     );
@@ -81,13 +82,16 @@ export class MenuController {
 
   @Delete(':id')
   @HttpCode(204)
-  async deleteMenu(@Req() req, @Param('id') id: string): Promise<void> {
-    const decoded: CustomerId = req.app.locals.decoded;
+  @UseGuards(JwtAuthGuard)
+  async deleteMenu(
+    @AuthUser() user: UserWithoutPassword,
+    @Param('id') id: string,
+  ): Promise<void> {
     const menu_id = parseInt(id);
     if (isNaN(menu_id)) {
       throw new HttpException('invalid value', HttpStatus.BAD_REQUEST);
     }
-    const result = await this.service.deleteMenu(decoded.customerId, menu_id);
+    const result = await this.service.deleteMenu(user.userId, menu_id);
     if (result.isBad()) {
       throw new HttpException(result.errorMessage, result.httpStatus);
     }

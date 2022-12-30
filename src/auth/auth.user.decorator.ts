@@ -7,7 +7,6 @@ export const AuthUser = createParamDecorator(
     const user = ctx.switchToHttp().getRequest<Request>()
       .user as JWTPayloadUser;
 
-    console.log('auth user', user);
     const userDetail: UserWithoutPassword = {
       userId: user.userId,
       loginId: user.loginId,

@@ -1,5 +1,13 @@
-import { Body, Controller, HttpException, Post, Req } from '@nestjs/common';
-import { CustomerId } from '../../model/customer-id';
+import {
+  Body,
+  Controller,
+  HttpException,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { JwtAuthGuard } from '../../auth/auth.guard';
+import { AuthUser } from '../../auth/auth.user.decorator';
+import { UserWithoutPassword } from '../../auth/jwt/jwt.payload';
 import { CreateChannelRequest } from './channelprovider.add.request';
 import { ChannelProviderService } from './channelprovider.service';
 
@@ -7,12 +15,12 @@ import { ChannelProviderService } from './channelprovider.service';
 export class ChannelProviderController {
   constructor(private readonly service: ChannelProviderService) {}
   @Post()
-  async createChannelProvider(@Req() req, @Body() body: CreateChannelRequest) {
-    const decoded: CustomerId = req.app.locals.decoded;
-    const result = await this.service.createChannelProvider(
-      decoded.customerId,
-      body,
-    );
+  @UseGuards(JwtAuthGuard)
+  async createChannelProvider(
+    @AuthUser() user: UserWithoutPassword,
+    @Body() body: CreateChannelRequest,
+  ) {
+    const result = await this.service.createChannelProvider(user.userId, body);
     if (result.isBad()) {
       throw new HttpException(result.errorMessage, result.httpStatus);
     }

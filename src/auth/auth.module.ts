@@ -5,7 +5,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UserRepository } from '../repositories/user.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { TokenInterceptor } from './interceptors/token.interceptor';
 import { JwtStrategy } from './jwt/jwt.strategy';
 
 @Module({
@@ -23,7 +22,6 @@ import { JwtStrategy } from './jwt/jwt.strategy';
     UserRepository,
     PrismaService,
     JwtStrategy,
-    TokenInterceptor,
   ],
   exports: [AuthService],
 })

@@ -67,13 +67,13 @@ describe('AppController (e2e)', () => {
     request(app.getHttpServer()).get('/').expect(404);
   });
 
-  it('/login (POST) success', async () => {
+  it('auth/login (POST) success', async () => {
     const req: LoginRequest = {
       loginId: 'sample_user2',
       password: 'password',
     };
     const response = await request(app.getHttpServer())
-      .post('/login')
+      .post('/auth/login')
       .send(req);
     expect(response.statusCode).toBe(200);
     expect(response.body.token).toBeDefined();
@@ -195,7 +195,7 @@ describe('AppController (e2e)', () => {
       .send(createReq);
     expect(response.statusCode).toBe(201);
     const menuData = await getMenuData(4);
-    console.log('created Menu', menuData);
+    expect(menuData).not.toBeNull();
     expect(menuData.menu_name).toBe(createReq.menu_name);
     expect(menuData.menu_type).toBe(createReq.menu_type);
     expect(menuData.price).toBe(0);
@@ -273,7 +273,7 @@ describe('AppController (e2e)', () => {
 
   async function login(req: LoginRequest): Promise<string> {
     const response = await request(app.getHttpServer())
-      .post('/login')
+      .post('/auth/login')
       .send(req);
     return response.body.token;
   }

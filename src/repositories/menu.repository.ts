@@ -18,7 +18,7 @@ export class MenuRepository {
         },
       },
     });
-    return !(result == null);
+    return result != null;
   }
 
   async updateMenuOf(menu: Menu): Promise<boolean> {
