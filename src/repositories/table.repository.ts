@@ -29,11 +29,8 @@ export class TableRepository {
     return result != null;
   }
 
-  async updateTableOf(
-    user_id: number,
-    req: UpdateTableRequest,
-  ): Promise<boolean> {
-    this.prisma.tbl_table.update({
+  async updateTableOf(user_id: number, req: UpdateTableRequest): Promise<void> {
+    await this.prisma.tbl_table.update({
       where: { id: user_id },
       data: {
         table_name: req.table_name,
@@ -41,7 +38,6 @@ export class TableRepository {
         user: { connect: { id: user_id } },
       },
     });
-    return;
   }
 
   async getTablesOf(user_id: number): Promise<Table[]> {

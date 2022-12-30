@@ -33,11 +33,7 @@ export class CourseRepository {
     });
   }
 
-  async updateCourseOf(
-    id: number,
-    user_id: number,
-    req: any,
-  ): Promise<boolean> {
+  async updateCourseOf(id: number, user_id: number, req: any): Promise<void> {
     await this.prisma.tbl_course.updateMany({
       where: { id, user_id },
       data: {
@@ -47,7 +43,6 @@ export class CourseRepository {
         updated_at: new Date(),
       },
     });
-    return;
   }
 
   async deleteCourseOf(id: number, user_id: number): Promise<boolean> {

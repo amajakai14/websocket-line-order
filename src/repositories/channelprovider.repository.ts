@@ -31,14 +31,13 @@ export class ChannelProviderRepository {
     return result != null;
   }
 
-  async updateChannel(id: string, status: string): Promise<boolean> {
-    this.prisma.tbl_channel_provider.update({
+  async updateChannel(id: string, status: string): Promise<void> {
+    await this.prisma.tbl_channel_provider.update({
       where: { id },
       data: {
         status,
       },
     });
-    return;
   }
 
   async getChannelOf(id: string): Promise<ChannelProvider> {
